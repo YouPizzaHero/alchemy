@@ -193,6 +193,22 @@
       removeTile(tile);
     });
 
+    // Double-click / double-tap removes tile. Click events don't fire after
+    // a drag, and fire for both mouse and touch on a quick press-release
+    // without movement — perfect for our needs.
+    const DOUBLE_TAP_MS = 350;
+    let lastClickTime = 0;
+    node.addEventListener('click', (e) => {
+      if (e.target === close) return;
+      const now = Date.now();
+      if (now - lastClickTime < DOUBLE_TAP_MS) {
+        lastClickTime = 0;
+        removeTile(tile);
+      } else {
+        lastClickTime = now;
+      }
+    });
+
     return tile;
   }
 

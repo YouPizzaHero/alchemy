@@ -351,6 +351,68 @@ button.danger:hover { background: rgba(196,49,74,0.15); }
   cursor: not-allowed;
   opacity: 0.7;
 }
+
+/* Settings modal */
+.settings-help {
+  font-style: italic;
+  color: var(--ink-dim);
+  font-size: 13px;
+  margin: 4px 0 12px !important;
+}
+.settings-options {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.settings-opt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 6px 8px;
+  background: var(--bg-soft);
+  color: var(--parchment);
+  border: 1px solid var(--border-light);
+  border-radius: 10px;
+  cursor: pointer;
+  text-align: center;
+  min-height: 92px;
+  transition: border-color 0.12s ease, background 0.12s ease, box-shadow 0.12s ease, transform 0.05s ease;
+}
+.settings-opt:hover { border-color: var(--gold); background: var(--bg-mid); box-shadow: none; }
+.settings-opt.active { border-color: var(--gold); background: rgba(216,168,56,0.12); box-shadow: var(--glow); }
+.settings-opt.small { min-height: 48px; justify-content: center; padding: 8px; }
+.settings-opt-label {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--parchment);
+}
+.settings-opt.active .settings-opt-label { color: var(--gold-bright); }
+.settings-opt-desc {
+  font-size: 11px;
+  font-style: italic;
+  color: var(--ink-dim);
+  letter-spacing: 0;
+  text-transform: none;
+}
+.layout-preview {
+  display: flex;
+  width: 70px;
+  height: 36px;
+  border: 1px solid var(--border-light);
+  border-radius: 4px;
+  overflow: hidden;
+  pointer-events: none;
+}
+.lp-workspace { flex: 1; background: linear-gradient(135deg, #1a0e2c, #0d0719); }
+.lp-library { background: linear-gradient(180deg, var(--bg-mid), var(--bg-deep)); border-left: 1px solid var(--border); }
+.lp-narrow   { width: 16px; }
+.lp-balanced { width: 22px; }
+.lp-wide     { width: 32px; }
+.settings-opt.active .layout-preview { border-color: var(--gold); }
 .mobile-only { display: none; }
 
 /* Rotate prompt — shown when the screen is portrait + phone-sized. */

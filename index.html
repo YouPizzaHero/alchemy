@@ -18,10 +18,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=EB+Garamond:ital@0;1&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/splash.css?v=10">
-  <link rel="stylesheet" href="css/main.css?v=10">
-  <link rel="stylesheet" href="css/icons.css?v=10">
-  <link rel="stylesheet" href="css/workspace.css?v=10">
+  <link rel="stylesheet" href="css/splash.css?v=13">
+  <link rel="stylesheet" href="css/main.css?v=13">
+  <link rel="stylesheet" href="css/icons.css?v=13">
+  <link rel="stylesheet" href="css/workspace.css?v=13">
 </head>
 <body>
   <div id="app">
@@ -36,6 +36,7 @@
         <span id="discovery-count">0 / 0</span>
       </div>
       <div class="actions">
+        <button id="btn-settings" class="ghost" title="UI settings">Settings</button>
         <button id="btn-about" class="ghost" title="About this game">About</button>
         <button id="btn-clear" class="ghost" title="Clear the workspace">Clear</button>
         <button id="btn-reset" class="ghost danger" title="Reset all progress">Reset</button>
@@ -81,6 +82,49 @@
       </div>
       <h2>Rotate your device</h2>
       <p>Alchemy plays in landscape. Turn your phone sideways to continue.</p>
+    </div>
+
+    <div id="settings-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+      <div class="modal-backdrop" data-close></div>
+      <div class="modal-card">
+        <button class="modal-close" data-close aria-label="Close">✕</button>
+        <h2 id="settings-title" class="modal-title">Settings</h2>
+        <div class="modal-body">
+          <h3>Layout</h3>
+          <p class="settings-help">Adjust how much room the library takes from the workspace.</p>
+          <div class="settings-options" id="layout-options">
+            <button type="button" class="settings-opt" data-layout="focus-board">
+              <div class="layout-preview"><div class="lp-workspace"></div><div class="lp-library lp-narrow"></div></div>
+              <div class="settings-opt-label">Focus on board</div>
+              <div class="settings-opt-desc">Slim library</div>
+            </button>
+            <button type="button" class="settings-opt" data-layout="balanced">
+              <div class="layout-preview"><div class="lp-workspace"></div><div class="lp-library lp-balanced"></div></div>
+              <div class="settings-opt-label">Balanced</div>
+              <div class="settings-opt-desc">Default</div>
+            </button>
+            <button type="button" class="settings-opt" data-layout="focus-library">
+              <div class="layout-preview"><div class="lp-workspace"></div><div class="lp-library lp-wide"></div></div>
+              <div class="settings-opt-label">Focus on library</div>
+              <div class="settings-opt-desc">Wider library</div>
+            </button>
+          </div>
+
+          <h3>Library tile size</h3>
+          <p class="settings-help">Smaller tiles fit more on screen at once.</p>
+          <div class="settings-options" id="tilesize-options">
+            <button type="button" class="settings-opt small" data-tilesize="compact">
+              <div class="settings-opt-label">Compact</div>
+            </button>
+            <button type="button" class="settings-opt small" data-tilesize="normal">
+              <div class="settings-opt-label">Normal</div>
+            </button>
+            <button type="button" class="settings-opt small" data-tilesize="large">
+              <div class="settings-opt-label">Large</div>
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div id="reset-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="reset-title">
@@ -139,17 +183,18 @@
     </div>
   </div>
 
-  <script src="js/splash.js?v=10"></script>
-  <script src="data/elements.js?v=10"></script>
-  <script src="data/recipes.js?v=10"></script>
-  <script src="js/storage.js?v=10"></script>
-  <script src="js/state.js?v=10"></script>
-  <script src="js/recipes.js?v=10"></script>
-  <script src="js/ranks.js?v=10"></script>
-  <script src="js/icons.js?v=10"></script>
-  <script src="js/progress.js?v=10"></script>
-  <script src="js/sidebar.js?v=10"></script>
-  <script src="js/workspace.js?v=10"></script>
-  <script src="js/main.js?v=10"></script>
+  <script src="js/splash.js?v=13"></script>
+  <script src="data/elements.js?v=13"></script>
+  <script src="data/recipes.js?v=13"></script>
+  <script src="js/storage.js?v=13"></script>
+  <script src="js/state.js?v=13"></script>
+  <script src="js/recipes.js?v=13"></script>
+  <script src="js/ranks.js?v=13"></script>
+  <script src="js/icons.js?v=13"></script>
+  <script src="js/progress.js?v=13"></script>
+  <script src="js/settings.js?v=13"></script>
+  <script src="js/sidebar.js?v=13"></script>
+  <script src="js/workspace.js?v=13"></script>
+  <script src="js/main.js?v=13"></script>
 </body>
 </html>
