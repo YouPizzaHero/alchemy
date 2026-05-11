@@ -4,6 +4,7 @@
 
   const KEY_LAYOUT   = 'alchemy_layout';
   const KEY_TILESIZE = 'alchemy_tilesize';
+  const KEY_POSITION = 'alchemy_position';
 
   const LAYOUTS = {
     'focus-board':   { libW: '240px' },
@@ -17,12 +18,16 @@
     large:   { lib: 96, icon: 48, name: 10 },
   };
 
+  const POSITIONS = { right: true, left: true };
+
   let layout   = 'balanced';
   let tileSize = 'normal';
+  let position = 'right';
 
   function init() {
     layout   = readPref(KEY_LAYOUT, 'balanced', LAYOUTS);
     tileSize = readPref(KEY_TILESIZE, 'normal', TILE_SIZES);
+    position = readPref(KEY_POSITION, 'right', POSITIONS);
     apply();
     wireModal();
   }
@@ -47,12 +52,17 @@
     root.style.setProperty('--lib-icon-size', ts.icon + 'px');
     root.style.setProperty('--lib-name-size', ts.name + 'px');
 
+    document.body.classList.toggle('layout-flipped', position === 'left');
+
     // Update active state on settings buttons (if modal exists).
     for (const b of document.querySelectorAll('#layout-options .settings-opt')) {
       b.classList.toggle('active', b.dataset.layout === layout);
     }
     for (const b of document.querySelectorAll('#tilesize-options .settings-opt')) {
       b.classList.toggle('active', b.dataset.tilesize === tileSize);
+    }
+    for (const b of document.querySelectorAll('#position-options .settings-opt')) {
+      b.classList.toggle('active', b.dataset.position === position);
     }
   }
 
@@ -67,6 +77,13 @@
     if (!TILE_SIZES[name] || name === tileSize) return;
     tileSize = name;
     writePref(KEY_TILESIZE, name);
+    apply();
+  }
+
+  function setPosition(name) {
+    if (!POSITIONS[name] || name === position) return;
+    position = name;
+    writePref(KEY_POSITION, name);
     apply();
   }
 
@@ -90,6 +107,7 @@
       if (!opt) return;
       if (opt.dataset.layout) setLayout(opt.dataset.layout);
       if (opt.dataset.tilesize) setTileSize(opt.dataset.tilesize);
+      if (opt.dataset.position) setPosition(opt.dataset.position);
     });
 
     document.addEventListener('keydown', (e) => {
@@ -97,5 +115,5 @@
     });
   }
 
-  global.Settings = { init, setLayout, setTileSize };
+  global.Settings = { init, setLayout, setTileSize, setPosition };
 })(window);

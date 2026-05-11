@@ -10,6 +10,10 @@
   border-right: 1px solid var(--border);
 }
 
+/* Flipped: library on the left, workspace on the right. */
+body.layout-flipped #stage { flex-direction: row-reverse; }
+body.layout-flipped #workspace { border-right: none; border-left: 1px solid var(--border); }
+
 #workspace::before {
   content: '';
   position: absolute;
