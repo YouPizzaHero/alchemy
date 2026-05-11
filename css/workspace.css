@@ -106,6 +106,39 @@
 .tile.miss { animation: shake 0.4s ease; }
 .tile.poof { animation: poof 0.35s ease forwards; }
 
+.tile-close {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 22px;
+  height: 22px;
+  min-height: 22px;
+  padding: 0;
+  border-radius: 50%;
+  background: var(--bg-deep);
+  color: var(--parchment-dim);
+  border: 1px solid var(--border-light);
+  font-family: 'EB Garamond', Georgia, serif;
+  font-size: 14px;
+  line-height: 1;
+  letter-spacing: 0;
+  text-transform: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s ease, background 0.12s ease, color 0.12s ease, transform 0.05s ease;
+  z-index: 3;
+}
+.tile:hover .tile-close { opacity: 1; }
+.tile-close:hover { background: var(--danger); color: white; border-color: var(--danger); box-shadow: none; }
+.tile-close:active { transform: scale(0.9); }
+
+@media (hover: none) {
+  .tile-close { opacity: 0.85; }
+}
+
 @keyframes shake {
   0%, 100% { transform: translateX(0); }
   25% { transform: translateX(-6px); }

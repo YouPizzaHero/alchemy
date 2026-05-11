@@ -69,23 +69,31 @@
     node.style.left = clampX(x) + 'px';
     node.style.top  = clampY(y) + 'px';
 
+    const close = document.createElement('button');
+    close.className = 'tile-close';
+    close.type = 'button';
+    close.setAttribute('aria-label', 'Remove element');
+    close.textContent = '✕';
+    node.appendChild(close);
+
     const tile = { id: elementId, el, node, x: clampX(x), y: clampY(y) };
     tiles.push(tile);
     surfaceEl.appendChild(node);
 
     node.addEventListener('pointerdown', (e) => {
       if (e.button !== undefined && e.button !== 0) return;
+      if (e.target === close) return;  // let the close button handle its own events
       e.stopPropagation();
       const rect = node.getBoundingClientRect();
       beginDrag(tile, e, e.clientX - rect.left, e.clientY - rect.top);
     });
 
-    // Double-click / double-tap removes tile.
-    let lastTap = 0;
-    node.addEventListener('pointerup', (e) => {
-      const now = Date.now();
-      if (now - lastTap < 350) removeTile(tile);
-      lastTap = now;
+    close.addEventListener('pointerdown', (e) => {
+      e.stopPropagation();
+    });
+    close.addEventListener('click', (e) => {
+      e.stopPropagation();
+      removeTile(tile);
     });
 
     return tile;
