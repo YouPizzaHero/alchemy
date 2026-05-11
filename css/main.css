@@ -353,10 +353,94 @@ button.danger:hover { background: rgba(196,49,74,0.15); }
 }
 .mobile-only { display: none; }
 
-@media (max-width: 720px) and (orientation: portrait) {
-  #stage { flex-direction: column; }
-  .mobile-only { display: inline-flex; }
-  body { font-size: 16px; }
-  .title h1 { font-size: 18px; }
-  .stats { font-size: 11px; }
+/* Rotate prompt — shown when the screen is portrait + phone-sized. */
+#rotate-prompt {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background:
+    radial-gradient(ellipse at 50% 40%, #2a0810 0%, #100308 55%, #000 100%);
+  padding: 32px;
+  color: var(--parchment);
+}
+#rotate-prompt h2 {
+  margin: 24px 0 8px;
+  font-family: 'Cinzel', serif;
+  font-size: 22px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold-bright);
+}
+#rotate-prompt p {
+  margin: 0;
+  max-width: 320px;
+  font-size: 16px;
+  color: var(--parchment-dim);
+  line-height: 1.5;
+}
+.rotate-art {
+  position: relative;
+  width: 88px;
+  height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.rotate-phone {
+  width: 64px;
+  height: 110px;
+  border: 3px solid var(--gold-bright);
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(255,210,63,0.08), rgba(255,210,63,0.02));
+  position: relative;
+  box-shadow: 0 0 20px rgba(255,210,63,0.25);
+  animation: rotate-phone-anim 2.4s ease-in-out infinite;
+  transform-origin: center;
+}
+.rotate-phone::before {
+  content: '';
+  position: absolute;
+  top: 6px; left: 50%; transform: translateX(-50%);
+  width: 22px; height: 3px;
+  background: var(--gold);
+  border-radius: 2px;
+  opacity: 0.6;
+}
+.rotate-phone::after {
+  content: '';
+  position: absolute;
+  bottom: 6px; left: 50%; transform: translateX(-50%);
+  width: 8px; height: 8px;
+  border: 2px solid var(--gold);
+  border-radius: 50%;
+  opacity: 0.6;
+}
+.rotate-arrow {
+  position: absolute;
+  right: -20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 30px;
+  color: var(--gold-bright);
+  text-shadow: 0 0 10px rgba(255,210,63,0.4);
+  animation: rotate-arrow-anim 2.4s ease-in-out infinite;
+}
+@keyframes rotate-phone-anim {
+  0%, 35%   { transform: rotate(0deg); }
+  55%, 100% { transform: rotate(-90deg); }
+}
+@keyframes rotate-arrow-anim {
+  0%, 35%   { opacity: 0; }
+  45%       { opacity: 1; }
+  55%, 100% { opacity: 0; }
+}
+
+@media (orientation: portrait) and (max-width: 900px) {
+  #rotate-prompt { display: flex; }
+  #topbar, #progress-bar, #stage { visibility: hidden; }
 }

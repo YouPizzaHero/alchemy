@@ -107,18 +107,48 @@
   }
 
   // --- Spawning tiles from the library --------------------------------------
+  // A tile is only spawned after the pointer has moved past DRAG_THRESHOLD
+  // from its starting point. A simple click/tap on a library entry does
+  // nothing — the player must actually drag onto the workspace.
+  const DRAG_THRESHOLD = 10;
+
   function attachLibraryDragSource(node, elementId) {
     node.addEventListener('pointerdown', (e) => {
       if (e.button !== undefined && e.button !== 0) return;
       e.preventDefault();
-      // Spawn a new tile at the pointer's current position on the workspace.
-      const rect = workspaceEl.getBoundingClientRect();
-      const x = e.clientX - rect.left - TILE_W / 2;
-      const y = e.clientY - rect.top - TILE_H / 2;
-      const tile = spawnTile(elementId, x, y);
-      if (!tile) return;
-      // Begin drag immediately.
-      beginDrag(tile, e, TILE_W / 2, TILE_H / 2);
+      const startX = e.clientX;
+      const startY = e.clientY;
+      const pointerId = e.pointerId;
+
+      function onMove(ev) {
+        if (ev.pointerId !== pointerId) return;
+        const dx = ev.clientX - startX;
+        const dy = ev.clientY - startY;
+        if (Math.hypot(dx, dy) < DRAG_THRESHOLD) return;
+        // Threshold crossed — hand off to the workspace drag system.
+        cleanup();
+        const rect = workspaceEl.getBoundingClientRect();
+        const x = ev.clientX - rect.left - TILE_W / 2;
+        const y = ev.clientY - rect.top - TILE_H / 2;
+        const tile = spawnTile(elementId, x, y);
+        if (!tile) return;
+        beginDrag(tile, ev, TILE_W / 2, TILE_H / 2);
+      }
+
+      function onEnd(ev) {
+        if (ev.pointerId !== pointerId) return;
+        cleanup();
+      }
+
+      function cleanup() {
+        document.removeEventListener('pointermove', onMove);
+        document.removeEventListener('pointerup', onEnd);
+        document.removeEventListener('pointercancel', onEnd);
+      }
+
+      document.addEventListener('pointermove', onMove);
+      document.addEventListener('pointerup', onEnd);
+      document.addEventListener('pointercancel', onEnd);
     });
   }
 
