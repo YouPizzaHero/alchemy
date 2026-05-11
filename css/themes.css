@@ -1,0 +1,208 @@
+/* Workspace themes — one per rank tier.
+   Applied via .theme-<slug> on #workspace.
+   Each theme overrides the workspace background, the inner-border tint
+   (::before), and the corner glyph color (::after). */
+
+/* ===== INITIATE — chiseled stone slab ===== */
+#workspace.theme-initiate {
+  background:
+    radial-gradient(circle at 50% 50%, rgba(180,170,150,0.06), transparent 60%),
+    repeating-linear-gradient(45deg, rgba(255,255,255,0.012) 0 2px, transparent 2px 4px),
+    linear-gradient(135deg, #1a1a1f, #0e0e12);
+}
+#workspace.theme-initiate::before {
+  border-color: rgba(180,170,150,0.18);
+  background:
+    radial-gradient(circle at 20% 30%, rgba(200,190,170,0.03), transparent 35%),
+    radial-gradient(circle at 80% 75%, rgba(140,130,110,0.03), transparent 35%);
+}
+#workspace.theme-initiate::after { color: rgba(200,190,170,0.08); content: '◌'; }
+
+/* ===== APPRENTICE — workbench parchment ===== */
+#workspace.theme-apprentice {
+  background:
+    radial-gradient(circle at 15% 20%, rgba(120,60,20,0.12), transparent 40%),
+    radial-gradient(circle at 85% 80%, rgba(60,30,10,0.18), transparent 35%),
+    repeating-radial-gradient(circle at 60% 40%, rgba(255,220,160,0.015) 0 3px, transparent 3px 8px),
+    linear-gradient(135deg, #2a1a10, #1a0e07);
+}
+#workspace.theme-apprentice::before {
+  border-color: rgba(216,168,56,0.18);
+}
+#workspace.theme-apprentice::after { color: rgba(216,168,56,0.12); content: '✦'; }
+
+/* ===== ADEPT — aged grimoire page ===== */
+#workspace.theme-adept {
+  background:
+    radial-gradient(ellipse at 50% 40%, rgba(180,140,80,0.06), transparent 50%),
+    repeating-linear-gradient(0deg, transparent 0 38px, rgba(180,140,80,0.04) 38px 39px),
+    repeating-linear-gradient(90deg, transparent 0 38px, rgba(180,140,80,0.03) 38px 39px),
+    linear-gradient(170deg, #221b14, #15100b);
+}
+#workspace.theme-adept::before {
+  border-color: rgba(216,168,56,0.25);
+  box-shadow: inset 0 0 24px rgba(216,168,56,0.06);
+}
+#workspace.theme-adept::after { color: rgba(216,168,56,0.18); content: '☿'; }
+
+/* ===== SCHOLAR — burgundy library tome ===== */
+#workspace.theme-scholar {
+  background:
+    radial-gradient(circle at 50% 50%, rgba(216,168,56,0.08), transparent 65%),
+    repeating-linear-gradient(45deg, rgba(0,0,0,0.06) 0 1px, transparent 1px 4px),
+    linear-gradient(160deg, #3a1218, #1f0a0e);
+}
+#workspace.theme-scholar::before {
+  border-color: rgba(216,168,56,0.45);
+  box-shadow: inset 0 0 36px rgba(216,168,56,0.1);
+  background:
+    linear-gradient(135deg, transparent 96%, rgba(255,210,63,0.4)),
+    linear-gradient(-135deg, transparent 96%, rgba(255,210,63,0.4)),
+    linear-gradient(45deg, transparent 96%, rgba(255,210,63,0.4)),
+    linear-gradient(-45deg, transparent 96%, rgba(255,210,63,0.4));
+}
+#workspace.theme-scholar::after { color: rgba(255,210,63,0.25); content: '✦'; }
+
+/* ===== MYSTIC — celestial star chart ===== */
+#workspace.theme-mystic {
+  background:
+    radial-gradient(2px 2px at 14% 22%, rgba(255,255,255,0.6), transparent 50%),
+    radial-gradient(1px 1px at 78% 12%, rgba(255,255,255,0.7), transparent 50%),
+    radial-gradient(1.5px 1.5px at 30% 70%, rgba(255,255,255,0.5), transparent 50%),
+    radial-gradient(1px 1px at 60% 84%, rgba(255,255,255,0.5), transparent 50%),
+    radial-gradient(2px 2px at 92% 60%, rgba(255,255,255,0.55), transparent 50%),
+    radial-gradient(1px 1px at 48% 36%, rgba(255,255,255,0.4), transparent 50%),
+    radial-gradient(1.5px 1.5px at 22% 90%, rgba(255,255,255,0.5), transparent 50%),
+    radial-gradient(1px 1px at 84% 38%, rgba(255,255,255,0.5), transparent 50%),
+    radial-gradient(circle at 50% 60%, rgba(80,130,220,0.12), transparent 55%),
+    linear-gradient(180deg, #050614, #0a0a1f 60%, #03030c);
+}
+#workspace.theme-mystic::before {
+  border-color: rgba(160,200,255,0.3);
+  box-shadow: inset 0 0 40px rgba(80,130,220,0.12);
+}
+#workspace.theme-mystic::after { color: rgba(255,255,255,0.35); content: '✧'; }
+
+/* ===== SAGE — glowing summoning circle ===== */
+#workspace.theme-sage {
+  background:
+    radial-gradient(circle at 50% 50%,
+      transparent 28%,
+      rgba(168,80,255,0.18) 30%,
+      rgba(168,80,255,0.04) 33%,
+      transparent 36%),
+    radial-gradient(circle at 50% 50%,
+      transparent 22%,
+      rgba(168,80,255,0.12) 24%,
+      transparent 26%),
+    radial-gradient(circle at 50% 50%, rgba(168,80,255,0.2), transparent 50%),
+    linear-gradient(160deg, #14081f, #050010);
+}
+#workspace.theme-sage::before {
+  border-color: rgba(200,140,255,0.5);
+  box-shadow: inset 0 0 60px rgba(168,80,255,0.18);
+}
+#workspace.theme-sage::after { color: rgba(220,160,255,0.35); content: '⛧'; font-size: 50px; }
+
+/* ===== ARCHMAGE — cosmic nebula ===== */
+#workspace.theme-archmage {
+  background:
+    radial-gradient(ellipse 40% 30% at 20% 30%, rgba(255,80,180,0.18), transparent 70%),
+    radial-gradient(ellipse 35% 40% at 75% 65%, rgba(80,140,255,0.18), transparent 70%),
+    radial-gradient(ellipse 25% 20% at 60% 20%, rgba(255,210,63,0.12), transparent 70%),
+    radial-gradient(2px 2px at 8% 18%, rgba(255,255,255,0.8), transparent 50%),
+    radial-gradient(1.5px 1.5px at 88% 22%, rgba(255,255,255,0.7), transparent 50%),
+    radial-gradient(2px 2px at 32% 78%, rgba(255,255,255,0.7), transparent 50%),
+    radial-gradient(1px 1px at 70% 88%, rgba(255,255,255,0.6), transparent 50%),
+    radial-gradient(2px 2px at 95% 52%, rgba(255,255,255,0.8), transparent 50%),
+    radial-gradient(1px 1px at 16% 48%, rgba(255,255,255,0.5), transparent 50%),
+    linear-gradient(135deg, #0a0218, #1a0635, #050010);
+}
+#workspace.theme-archmage::before {
+  border-color: rgba(255,180,240,0.4);
+  box-shadow: inset 0 0 60px rgba(180,80,255,0.15), inset 0 0 120px rgba(80,140,255,0.08);
+}
+#workspace.theme-archmage::after {
+  color: rgba(255,230,255,0.4); content: '✶'; font-size: 64px;
+  text-shadow: 0 0 18px rgba(255,180,255,0.5);
+}
+
+/* ===== DEMIURGE — forge of creation, divine gold ===== */
+#workspace.theme-demiurge {
+  background:
+    repeating-conic-gradient(from 0deg at 50% 50%,
+      rgba(255,210,63,0.05) 0deg 6deg,
+      transparent 6deg 18deg),
+    radial-gradient(circle at 50% 45%, rgba(255,230,140,0.32), rgba(216,168,56,0.18) 30%, transparent 65%),
+    radial-gradient(circle at 50% 50%, #2a1808, #100804 60%, #050200);
+}
+#workspace.theme-demiurge::before {
+  border-color: rgba(255,210,63,0.7);
+  box-shadow: inset 0 0 80px rgba(255,210,63,0.25), 0 0 24px rgba(255,210,63,0.4);
+  background:
+    linear-gradient(135deg, transparent 94%, rgba(255,230,140,0.6)),
+    linear-gradient(-135deg, transparent 94%, rgba(255,230,140,0.6)),
+    linear-gradient(45deg, transparent 94%, rgba(255,230,140,0.6)),
+    linear-gradient(-45deg, transparent 94%, rgba(255,230,140,0.6));
+}
+#workspace.theme-demiurge::after {
+  color: rgba(255,230,140,0.65); content: '☼'; font-size: 72px;
+  text-shadow: 0 0 24px rgba(255,210,63,0.7);
+}
+
+/* ===== Smooth theme transitions ===== */
+#workspace,
+#workspace::before,
+#workspace::after {
+  transition: background 0.6s ease, color 0.6s ease, border-color 0.6s ease, box-shadow 0.6s ease;
+}
+
+/* ===== Rank-up banner ===== */
+.rank-up-banner {
+  position: fixed;
+  top: 28%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1500;
+  text-align: center;
+  pointer-events: none;
+  padding: 28px 44px;
+  border: 1px solid var(--gold);
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(20,12,38,0.92), rgba(8,5,18,0.95));
+  box-shadow: 0 0 48px rgba(255,210,63,0.4), 0 12px 36px rgba(0,0,0,0.7);
+  animation: rank-banner 4.2s cubic-bezier(0.2,1,0.3,1) forwards;
+  min-width: 280px;
+}
+.rank-up-label {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--parchment-dim);
+  margin-bottom: 6px;
+}
+.rank-up-title {
+  font-family: 'Cinzel', serif;
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold-bright);
+  text-shadow: 0 0 16px rgba(255,210,63,0.55);
+  margin-bottom: 8px;
+}
+.rank-up-flavor {
+  font-family: 'EB Garamond', Georgia, serif;
+  font-style: italic;
+  font-size: 15px;
+  color: var(--parchment);
+  max-width: 360px;
+  line-height: 1.4;
+}
+@keyframes rank-banner {
+  0%   { opacity: 0; transform: translate(-50%, -60%) scale(0.92); }
+  10%  { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  85%  { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -45%) scale(0.98); }
+}
