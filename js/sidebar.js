@@ -2,9 +2,10 @@
 (function (global) {
   'use strict';
 
-  let listEl, searchEl, tabsEl, toggleBtn, libraryEl;
+  let listEl, searchEl, tabsEl, toggleBtn, libraryEl, filterToggleBtn, ftActiveEl;
   let activeCategory = 'all';
   let searchQuery = '';
+  let filtersCollapsed = false;
 
   const CATEGORIES = [
     { id: 'all',       label: 'All' },
@@ -28,6 +29,8 @@
     tabsEl    = document.getElementById('category-tabs');
     toggleBtn = document.getElementById('btn-library-toggle');
     libraryEl = document.getElementById('library');
+    filterToggleBtn = document.getElementById('filter-toggle');
+    ftActiveEl      = document.getElementById('ft-active');
 
     renderTabs();
 
@@ -40,8 +43,34 @@
       libraryEl.classList.toggle('collapsed');
     });
 
+    // Restore filter collapse preference.
+    try { filtersCollapsed = localStorage.getItem('alchemy_filters_collapsed') === '1'; } catch (e) {}
+    applyFilterCollapse();
+
+    filterToggleBtn.addEventListener('click', () => {
+      filtersCollapsed = !filtersCollapsed;
+      try { localStorage.setItem('alchemy_filters_collapsed', filtersCollapsed ? '1' : '0'); } catch (e) {}
+      applyFilterCollapse();
+    });
+
     State.onChange(render);
     render();
+  }
+
+  function applyFilterCollapse() {
+    libraryEl.classList.toggle('filters-collapsed', filtersCollapsed);
+    filterToggleBtn.setAttribute('aria-expanded', filtersCollapsed ? 'false' : 'true');
+    updateFilterToggleLabel();
+  }
+
+  function updateFilterToggleLabel() {
+    if (!ftActiveEl) return;
+    if (filtersCollapsed && activeCategory !== 'all') {
+      const cat = CATEGORIES.find(c => c.id === activeCategory);
+      ftActiveEl.textContent = cat ? cat.label : '';
+    } else {
+      ftActiveEl.textContent = '';
+    }
   }
 
   function renderTabs() {
@@ -61,6 +90,7 @@
       b.addEventListener('click', () => {
         activeCategory = cat.id;
         for (const t of tabsEl.querySelectorAll('.cat-tab')) t.classList.toggle('active', t.dataset.cat === cat.id);
+        updateFilterToggleLabel();
         render();
       });
       tabsEl.appendChild(b);
