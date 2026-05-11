@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+  <meta name="theme-color" content="#0a0612">
+  <title>Alchemy — Forge the Unknown</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=EB+Garamond:ital@0;1&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/icons.css">
+  <link rel="stylesheet" href="css/workspace.css">
+</head>
+<body>
+  <div id="app">
+    <header id="topbar">
+      <div class="title">
+        <span class="glyph">⚗</span>
+        <h1>Alchemy</h1>
+      </div>
+      <div class="stats">
+        <span id="discovery-count">0 / 0 discovered</span>
+      </div>
+      <div class="actions">
+        <button id="btn-clear" class="ghost" title="Clear the workspace">Clear</button>
+        <button id="btn-reset" class="ghost danger" title="Reset all progress">Reset</button>
+      </div>
+    </header>
+
+    <main id="stage">
+      <section id="workspace" aria-label="Workspace">
+        <div id="workspace-surface"></div>
+        <div id="discovery-banner" class="hidden" aria-live="polite"></div>
+      </section>
+
+      <aside id="library" aria-label="Discovered elements">
+        <div class="library-header">
+          <input id="search" type="search" placeholder="Search…" aria-label="Search elements" autocomplete="off">
+          <button id="btn-library-toggle" class="ghost mobile-only" aria-label="Toggle library">▾</button>
+        </div>
+        <nav id="category-tabs" role="tablist"></nav>
+        <div id="library-list" role="list"></div>
+      </aside>
+    </main>
+
+    <div id="loading">Awakening the elements…</div>
+  </div>
+
+  <script src="data/elements.js"></script>
+  <script src="data/recipes.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/recipes.js"></script>
+  <script src="js/icons.js"></script>
+  <script src="js/sidebar.js"></script>
+  <script src="js/workspace.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

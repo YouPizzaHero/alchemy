@@ -1,0 +1,160 @@
+/* Procedural CSS icons — each category has a base shape composed via gradients,
+   clip-path and pseudo-elements. The element's --tint colors it. */
+
+.icon {
+  --tint: #888;
+  --tint-light: color-mix(in oklab, var(--tint) 70%, white 30%);
+  --tint-dark: color-mix(in oklab, var(--tint) 70%, black 30%);
+  width: 44px;
+  height: 44px;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.icon::before, .icon::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+/* LIQUID — droplet */
+.icon.icon-liquid::before {
+  background: radial-gradient(circle at 35% 30%, var(--tint-light), var(--tint) 50%, var(--tint-dark) 95%);
+  clip-path: polygon(50% 5%, 80% 35%, 90% 65%, 70% 92%, 30% 92%, 10% 65%, 20% 35%);
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
+}
+.icon.icon-liquid::after {
+  background: radial-gradient(circle at 38% 32%, rgba(255,255,255,0.6), transparent 25%);
+  clip-path: polygon(50% 5%, 80% 35%, 90% 65%, 70% 92%, 30% 92%, 10% 65%, 20% 35%);
+}
+
+/* FIRE — flame */
+.icon.icon-fire::before {
+  background: radial-gradient(circle at 50% 75%, var(--tint-light), var(--tint) 45%, var(--tint-dark) 95%);
+  clip-path: polygon(50% 5%, 70% 30%, 85% 55%, 78% 85%, 55% 95%, 45% 95%, 22% 85%, 15% 55%, 30% 30%);
+  filter: drop-shadow(0 0 6px var(--tint));
+}
+.icon.icon-fire::after {
+  background: radial-gradient(circle at 50% 80%, rgba(255,240,180,0.5), transparent 35%);
+  clip-path: polygon(50% 5%, 70% 30%, 85% 55%, 78% 85%, 55% 95%, 45% 95%, 22% 85%, 15% 55%, 30% 30%);
+}
+
+/* EARTH — chunky hex */
+.icon.icon-earth::before {
+  background: linear-gradient(160deg, var(--tint-light), var(--tint) 50%, var(--tint-dark));
+  clip-path: polygon(50% 5%, 92% 28%, 92% 72%, 50% 95%, 8% 72%, 8% 28%);
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,0.5));
+}
+.icon.icon-earth::after {
+  background: linear-gradient(160deg, transparent 40%, rgba(0,0,0,0.3));
+  clip-path: polygon(50% 5%, 92% 28%, 92% 72%, 50% 95%, 8% 72%, 8% 28%);
+}
+
+/* AIR — soft curl */
+.icon.icon-air::before {
+  background: radial-gradient(ellipse 60% 35% at 50% 50%, var(--tint-light), var(--tint) 60%, var(--tint-dark) 100%);
+  clip-path: ellipse(45% 30% at 50% 50%);
+  opacity: 0.95;
+}
+.icon.icon-air::after {
+  background:
+    radial-gradient(ellipse 30% 12% at 30% 38%, rgba(255,255,255,0.6), transparent),
+    radial-gradient(ellipse 35% 15% at 65% 62%, rgba(255,255,255,0.4), transparent);
+  clip-path: ellipse(45% 30% at 50% 50%);
+}
+
+/* PLANT — leaf */
+.icon.icon-plant::before {
+  background: radial-gradient(circle at 35% 30%, var(--tint-light), var(--tint) 55%, var(--tint-dark) 95%);
+  clip-path: polygon(50% 8%, 78% 25%, 88% 55%, 72% 85%, 45% 92%, 22% 80%, 12% 55%, 25% 25%);
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,0.4));
+}
+.icon.icon-plant::after {
+  background: linear-gradient(135deg, transparent 47%, rgba(0,0,0,0.4) 49%, rgba(0,0,0,0.4) 51%, transparent 53%);
+  clip-path: polygon(50% 8%, 78% 25%, 88% 55%, 72% 85%, 45% 92%, 22% 80%, 12% 55%, 25% 25%);
+}
+
+/* ANIMAL — rounded body */
+.icon.icon-animal::before {
+  background: radial-gradient(circle at 40% 35%, var(--tint-light), var(--tint) 55%, var(--tint-dark) 100%);
+  border-radius: 38% 38% 50% 50% / 42% 42% 58% 58%;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+}
+.icon.icon-animal::after {
+  background:
+    radial-gradient(circle 3px at 36% 42%, #1a0a14, transparent 60%),
+    radial-gradient(circle 3px at 60% 42%, #1a0a14, transparent 60%);
+  border-radius: 38% 38% 50% 50% / 42% 42% 58% 58%;
+}
+
+/* TOOL — wedge */
+.icon.icon-tool::before {
+  background: linear-gradient(135deg, var(--tint-light), var(--tint) 50%, var(--tint-dark));
+  clip-path: polygon(15% 80%, 70% 15%, 88% 28%, 32% 92%);
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+}
+.icon.icon-tool::after {
+  background: linear-gradient(135deg, transparent 60%, rgba(255,255,255,0.3));
+  clip-path: polygon(15% 80%, 70% 15%, 88% 28%, 32% 92%);
+}
+
+/* STRUCTURE — arch / house silhouette */
+.icon.icon-structure::before {
+  background: linear-gradient(160deg, var(--tint-light), var(--tint) 60%, var(--tint-dark));
+  clip-path: polygon(15% 95%, 15% 50%, 50% 18%, 85% 50%, 85% 95%);
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,0.5));
+}
+.icon.icon-structure::after {
+  background: linear-gradient(180deg, transparent 60%, rgba(0,0,0,0.35));
+  clip-path: polygon(15% 95%, 15% 50%, 50% 18%, 85% 50%, 85% 95%);
+}
+
+/* MINERAL — crystal shard */
+.icon.icon-mineral::before {
+  background: linear-gradient(145deg, var(--tint-light) 0%, var(--tint) 45%, var(--tint-dark) 100%);
+  clip-path: polygon(50% 5%, 78% 30%, 88% 65%, 65% 95%, 35% 95%, 12% 65%, 22% 30%);
+  filter: drop-shadow(0 0 6px var(--tint));
+}
+.icon.icon-mineral::after {
+  background: linear-gradient(145deg, rgba(255,255,255,0.55), transparent 45%);
+  clip-path: polygon(50% 5%, 78% 30%, 88% 65%, 65% 95%, 35% 95%, 12% 65%, 22% 30%);
+}
+
+/* MYTHIC — star */
+.icon.icon-mythic::before {
+  background: radial-gradient(circle, var(--tint-light), var(--tint) 50%, var(--tint-dark) 95%);
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  filter: drop-shadow(0 0 8px var(--tint));
+}
+.icon.icon-mythic::after {
+  background: radial-gradient(circle at 50% 45%, rgba(255,255,255,0.6), transparent 35%);
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+}
+
+/* TIME — hourglass */
+.icon.icon-time::before {
+  background: linear-gradient(180deg, var(--tint-light), var(--tint) 50%, var(--tint-dark));
+  clip-path: polygon(20% 8%, 80% 8%, 80% 22%, 55% 50%, 80% 78%, 80% 92%, 20% 92%, 20% 78%, 45% 50%, 20% 22%);
+  filter: drop-shadow(0 0 6px var(--tint));
+}
+.icon.icon-time::after {
+  background: linear-gradient(180deg, rgba(255,255,255,0.35), transparent 50%);
+  clip-path: polygon(20% 8%, 80% 8%, 80% 22%, 55% 50%, 80% 78%, 80% 92%, 20% 92%, 20% 78%, 45% 50%, 20% 22%);
+}
+
+/* ABSTRACT — sigil / hex ring */
+.icon.icon-abstract::before {
+  background:
+    radial-gradient(circle at 50% 50%, transparent 28%, var(--tint) 30%, var(--tint-dark) 50%, transparent 56%),
+    radial-gradient(circle at 50% 50%, var(--tint-light), transparent 30%);
+  clip-path: polygon(50% 2%, 92% 27%, 92% 73%, 50% 98%, 8% 73%, 8% 27%);
+  filter: drop-shadow(0 0 8px var(--tint));
+}
+.icon.icon-abstract::after {
+  background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.55) 0%, transparent 18%);
+  clip-path: polygon(50% 2%, 92% 27%, 92% 73%, 50% 98%, 8% 73%, 8% 27%);
+}
+
+/* Smaller variant for library tiles */
+.lib-tile .icon { width: 38px; height: 38px; }
+.tile .icon { width: 44px; height: 44px; }
