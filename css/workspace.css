@@ -323,12 +323,18 @@ body.layout-flipped #workspace { border-right: none; border-left: 1px solid var(
 #library-list {
   flex: 1;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   padding: 12px;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(calc(var(--lib-tile-size, 78px) + 4px), 1fr));
   gap: 8px;
   align-content: start;
   scrollbar-width: thin;
+  /* Override the body-level touch-action:none so the player can flick
+     to scroll through the discovered list on touch devices. A vertical
+     swipe scrolls; horizontal drag still goes through pointer events to
+     spawn a workspace tile. */
+  touch-action: pan-y;
 }
 #library-list::-webkit-scrollbar { width: 6px; }
 #library-list::-webkit-scrollbar-track { background: transparent; }
@@ -345,7 +351,10 @@ body.layout-flipped #workspace { border-right: none; border-left: 1px solid var(
   border: 1px solid var(--border);
   border-radius: 10px;
   cursor: grab;
-  touch-action: none;
+  /* pan-y lets a vertical finger-swipe across a tile scroll the library
+     instead of being captured by drag. Horizontal/diagonal drags still
+     produce pointer events, which spawn the workspace tile. */
+  touch-action: pan-y;
   transition: background 0.12s ease, border-color 0.12s ease, transform 0.05s ease;
   min-height: var(--lib-tile-size, 78px);
 }
