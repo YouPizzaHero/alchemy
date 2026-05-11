@@ -290,6 +290,71 @@ button.danger:hover { background: rgba(196,49,74,0.15); }
 }
 .credits-mark::first-letter { color: var(--ember); }
 
+.about-exit {
+  text-align: center;
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+.exit-btn {
+  background: transparent;
+  color: #e89090;
+  border: 1px solid #5a2a3a;
+  padding: 10px 22px;
+  letter-spacing: 0.18em;
+}
+.exit-btn:hover { background: rgba(196,49,74,0.18); color: white; box-shadow: 0 0 12px rgba(196,49,74,0.3); }
+
+/* Exit goodbye overlay */
+.exit-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 5000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(ellipse at 50% 40%, #14081f 0%, #050010 60%, #000 100%);
+  text-align: center;
+  padding: 32px;
+  animation: exit-fade-in 0.6s ease forwards;
+}
+.exit-overlay.hidden { display: none; }
+@keyframes exit-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.exit-card {
+  color: var(--parchment);
+  max-width: 440px;
+}
+.exit-glyph {
+  font-size: 78px;
+  color: var(--gold-bright);
+  text-shadow: 0 0 28px rgba(243,197,74,0.6);
+  margin-bottom: 8px;
+}
+.exit-card h2 {
+  margin: 0 0 10px;
+  font-family: 'Cinzel', serif;
+  font-size: 26px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold-bright);
+}
+.exit-card p {
+  margin: 0 0 6px;
+  font-size: 17px;
+  color: var(--parchment-dim);
+  line-height: 1.5;
+}
+.exit-card .exit-sub {
+  font-style: italic;
+  font-size: 14px;
+  color: var(--ink-mute);
+  margin-top: 12px;
+}
+
 /* Reset modal */
 .reset-card { max-width: 440px; }
 .reset-card .modal-title { color: #ffb0a8; }

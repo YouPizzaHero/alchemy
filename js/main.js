@@ -42,6 +42,28 @@
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && !modal.classList.contains('hidden')) modal.classList.add('hidden');
     });
+    const exitBtn = document.getElementById('btn-exit');
+    if (exitBtn) exitBtn.addEventListener('click', exitGame);
+  }
+
+  function exitGame() {
+    if (!window.confirm('Exit the game? Your discoveries are saved automatically.')) return;
+    // 1. Capacitor / wrapped app — close the native app
+    try {
+      const cap = window.Capacitor;
+      if (cap && cap.Plugins && cap.Plugins.App && typeof cap.Plugins.App.exitApp === 'function') {
+        cap.Plugins.App.exitApp();
+        return;
+      }
+    } catch (e) { /* fall through */ }
+
+    // 2. Browser — try to close the tab (only works for script-opened windows)
+    try { window.close(); } catch (e) { /* ignore */ }
+
+    // 3. Fallback — replace the screen with a 'curtain close' so the player
+    //    can manually close the tab.
+    const overlay = document.getElementById('exit-overlay');
+    if (overlay) overlay.classList.remove('hidden');
   }
 
   document.addEventListener('contextmenu', e => e.preventDefault());
