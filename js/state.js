@@ -42,6 +42,18 @@
     emit();
   }
 
+  // Replace the entire discovered set with the given array of ids.
+  // Used when loading a saved game. Persists and emits afterwards.
+  function loadDiscovered(ids) {
+    state.discovered = new Set();
+    for (const el of state.elements) if (el.base) state.discovered.add(el.id);
+    if (Array.isArray(ids)) {
+      for (const id of ids) if (state.byId.has(id)) state.discovered.add(id);
+    }
+    Storage.save(serialize());
+    emit();
+  }
+
   function persist() { Storage.save(serialize()); }
   function serialize() {
     return { discovered: Array.from(state.discovered) };
@@ -62,6 +74,6 @@
     state,
     ingestElements,
     discover, discoverSilent, isDiscovered,
-    resetProgress, hydrate, onChange,
+    resetProgress, loadDiscovered, hydrate, onChange,
   };
 })(window);

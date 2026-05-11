@@ -18,11 +18,11 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=EB+Garamond:ital@0;1&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/splash.css?v=17">
-  <link rel="stylesheet" href="css/main.css?v=17">
-  <link rel="stylesheet" href="css/icons.css?v=17">
-  <link rel="stylesheet" href="css/workspace.css?v=17">
-  <link rel="stylesheet" href="css/themes.css?v=17">
+  <link rel="stylesheet" href="css/splash.css?v=18">
+  <link rel="stylesheet" href="css/main.css?v=18">
+  <link rel="stylesheet" href="css/icons.css?v=18">
+  <link rel="stylesheet" href="css/workspace.css?v=18">
+  <link rel="stylesheet" href="css/themes.css?v=18">
 </head>
 <body>
   <div id="app">
@@ -37,6 +37,7 @@
         <span id="discovery-count">0 / 0</span>
       </div>
       <div class="actions">
+        <button id="btn-saves" class="ghost" title="Save / load games">Saves</button>
         <button id="btn-settings" class="ghost" title="UI settings">Settings</button>
         <button id="btn-about" class="ghost" title="About this game">About</button>
         <button id="btn-clear" class="ghost" title="Clear the workspace">Clear</button>
@@ -83,6 +84,23 @@
       </div>
       <h2>Rotate your device</h2>
       <p>Alchemy plays in landscape. Turn your phone sideways to continue.</p>
+    </div>
+
+    <div id="saves-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="saves-title">
+      <div class="modal-backdrop" data-close></div>
+      <div class="modal-card saves-card">
+        <button class="modal-close" data-close aria-label="Close">✕</button>
+        <h2 id="saves-title" class="modal-title">Saves</h2>
+        <div class="modal-body">
+          <p class="modal-flavor">Bookmark your run. Up to five slots — overwrite, load, or delete any.</p>
+          <div id="saves-list" class="saves-list"></div>
+          <div class="saves-extras">
+            <button type="button" data-action="export" class="ghost">Export to clipboard</button>
+            <button type="button" data-action="import" class="ghost">Import from text</button>
+          </div>
+          <div id="saves-message" class="saves-message"></div>
+        </div>
+      </div>
     </div>
 
     <div id="settings-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="settings-title">
@@ -184,18 +202,19 @@
     </div>
   </div>
 
-  <script src="js/splash.js?v=17"></script>
-  <script src="data/elements.js?v=17"></script>
-  <script src="data/recipes.js?v=17"></script>
-  <script src="js/storage.js?v=17"></script>
-  <script src="js/state.js?v=17"></script>
-  <script src="js/recipes.js?v=17"></script>
-  <script src="js/ranks.js?v=17"></script>
-  <script src="js/icons.js?v=17"></script>
-  <script src="js/progress.js?v=17"></script>
-  <script src="js/settings.js?v=17"></script>
-  <script src="js/sidebar.js?v=17"></script>
-  <script src="js/workspace.js?v=17"></script>
-  <script src="js/main.js?v=17"></script>
+  <script src="js/splash.js?v=18"></script>
+  <script src="data/elements.js?v=18"></script>
+  <script src="data/recipes.js?v=18"></script>
+  <script src="js/storage.js?v=18"></script>
+  <script src="js/state.js?v=18"></script>
+  <script src="js/recipes.js?v=18"></script>
+  <script src="js/ranks.js?v=18"></script>
+  <script src="js/icons.js?v=18"></script>
+  <script src="js/progress.js?v=18"></script>
+  <script src="js/saves.js?v=18"></script>
+  <script src="js/settings.js?v=18"></script>
+  <script src="js/sidebar.js?v=18"></script>
+  <script src="js/workspace.js?v=18"></script>
+  <script src="js/main.js?v=18"></script>
 </body>
 </html>

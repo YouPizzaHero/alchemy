@@ -17,6 +17,7 @@
     Progress.init();
     Workspace.init();
     Sidebar.init();
+    Saves.init();
     initAboutModal();
 
     document.getElementById('loading').classList.add('hidden');

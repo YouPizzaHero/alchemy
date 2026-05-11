@@ -36,6 +36,21 @@
     tiles = [];
   }
 
+  // Serialize the current workspace arrangement so it can be saved.
+  function serialize() {
+    return tiles.map(t => ({ id: t.id, x: t.x, y: t.y }));
+  }
+
+  // Rebuild the workspace from a serialized array. Replaces any current tiles.
+  function deserialize(arr) {
+    clear();
+    if (!Array.isArray(arr)) return;
+    for (const t of arr) {
+      if (!t || !State.state.byId.has(t.id)) continue;
+      spawnTile(t.id, Number(t.x) || 0, Number(t.y) || 0);
+    }
+  }
+
   // --- Reset confirmation modal ---------------------------------------------
   function openResetModal() {
     const modal = document.getElementById('reset-modal');
@@ -387,5 +402,5 @@
     return s.replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
   }
 
-  global.Workspace = { init, clear, attachLibraryDragSource };
+  global.Workspace = { init, clear, attachLibraryDragSource, serialize, deserialize };
 })(window);

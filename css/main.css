@@ -413,6 +413,104 @@ button.danger:hover { background: rgba(196,49,74,0.15); }
 .lp-balanced { width: 22px; }
 .lp-wide     { width: 32px; }
 .settings-opt.active .layout-preview { border-color: var(--gold); }
+
+/* Saves modal */
+.saves-card { max-width: 560px; }
+.saves-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 16px 0 10px;
+}
+.save-slot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background: var(--bg-soft);
+  border: 1px solid var(--border-light);
+  border-radius: 10px;
+  flex-wrap: wrap;
+}
+.save-slot.filled { border-color: rgba(216,168,56,0.4); }
+.save-slot.empty  { background: rgba(42,28,68,0.3); }
+.save-meta { flex: 1 1 200px; min-width: 0; }
+.save-label {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.save-num {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+}
+.save-name {
+  font-family: 'EB Garamond', Georgia, serif;
+  font-size: 17px;
+  color: var(--gold-bright);
+  font-style: italic;
+}
+.save-empty {
+  font-family: 'EB Garamond', Georgia, serif;
+  font-style: italic;
+  color: var(--ink-mute);
+  font-size: 15px;
+}
+.save-stats {
+  font-size: 12px;
+  color: var(--ink-dim);
+  letter-spacing: 0.04em;
+  margin-top: 2px;
+}
+.save-actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+.save-actions button {
+  font-size: 10px;
+  padding: 6px 10px;
+  letter-spacing: 0.12em;
+  min-height: 30px;
+}
+.save-actions button.primary {
+  background: var(--bg-mid);
+  color: var(--gold-bright);
+  border-color: var(--gold);
+}
+.save-actions button.danger-soft {
+  background: transparent;
+  color: #e89090;
+  border-color: #5a2a3a;
+}
+.save-actions button.danger-soft:hover { background: rgba(196,49,74,0.15); }
+
+.saves-extras {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+.saves-message {
+  text-align: center;
+  margin-top: 10px;
+  min-height: 20px;
+  font-family: 'EB Garamond', Georgia, serif;
+  font-size: 14px;
+  font-style: italic;
+  transition: color 0.2s ease;
+}
+.saves-message.ok  { color: var(--success); }
+.saves-message.err { color: #e89090; }
 .mobile-only { display: none; }
 
 /* Rotate prompt — shown when the screen is portrait + phone-sized. */
