@@ -10,9 +10,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=EB+Garamond:ital@0;1&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/main.css">
-  <link rel="stylesheet" href="css/icons.css">
-  <link rel="stylesheet" href="css/workspace.css">
+  <link rel="stylesheet" href="css/main.css?v=2">
+  <link rel="stylesheet" href="css/icons.css?v=2">
+  <link rel="stylesheet" href="css/workspace.css?v=2">
 </head>
 <body>
   <div id="app">
@@ -22,13 +22,24 @@
         <h1>Alchemy</h1>
       </div>
       <div class="stats">
-        <span id="discovery-count">0 / 0 discovered</span>
+        <span id="rank-title" class="rank-title">Initiate</span>
+        <span class="stats-sep">·</span>
+        <span id="discovery-count">0 / 0</span>
       </div>
       <div class="actions">
         <button id="btn-clear" class="ghost" title="Clear the workspace">Clear</button>
         <button id="btn-reset" class="ghost danger" title="Reset all progress">Reset</button>
       </div>
     </header>
+
+    <div id="progress-bar" aria-label="Overall progress">
+      <div id="progress-fill"></div>
+      <div id="progress-label">
+        <span id="progress-rank">Initiate</span>
+        <span class="progress-sep">·</span>
+        <span id="progress-percent">0%</span>
+      </div>
+    </div>
 
     <main id="stage">
       <section id="workspace" aria-label="Workspace">
@@ -49,14 +60,16 @@
     <div id="loading">Awakening the elements…</div>
   </div>
 
-  <script src="data/elements.js"></script>
-  <script src="data/recipes.js"></script>
-  <script src="js/storage.js"></script>
-  <script src="js/state.js"></script>
-  <script src="js/recipes.js"></script>
-  <script src="js/icons.js"></script>
-  <script src="js/sidebar.js"></script>
-  <script src="js/workspace.js"></script>
-  <script src="js/main.js"></script>
+  <script src="data/elements.js?v=2"></script>
+  <script src="data/recipes.js?v=2"></script>
+  <script src="js/storage.js?v=2"></script>
+  <script src="js/state.js?v=2"></script>
+  <script src="js/recipes.js?v=2"></script>
+  <script src="js/ranks.js?v=2"></script>
+  <script src="js/icons.js?v=2"></script>
+  <script src="js/progress.js?v=2"></script>
+  <script src="js/sidebar.js?v=2"></script>
+  <script src="js/workspace.js?v=2"></script>
+  <script src="js/main.js?v=2"></script>
 </body>
 </html>

@@ -13,6 +13,7 @@
     State.state.recipes = Recipes.ingest(recipes, State.state.byId);
     State.hydrate();
 
+    Progress.init();
     Workspace.init();
     Sidebar.init();
 

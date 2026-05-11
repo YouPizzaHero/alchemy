@@ -49,14 +49,45 @@
     for (const cat of CATEGORIES) {
       const b = document.createElement('button');
       b.className = 'cat-tab' + (cat.id === activeCategory ? ' active' : '');
-      b.textContent = cat.label;
       b.dataset.cat = cat.id;
+      const label = document.createElement('span');
+      label.className = 'cat-label';
+      label.textContent = cat.label;
+      const count = document.createElement('span');
+      count.className = 'cat-count';
+      count.dataset.cat = cat.id;
+      b.appendChild(label);
+      b.appendChild(count);
       b.addEventListener('click', () => {
         activeCategory = cat.id;
         for (const t of tabsEl.querySelectorAll('.cat-tab')) t.classList.toggle('active', t.dataset.cat === cat.id);
         render();
       });
       tabsEl.appendChild(b);
+    }
+  }
+
+  function updateTabCounts() {
+    const totals = new Map();    // category -> total
+    const founds = new Map();    // category -> found
+    let totalAll = 0, foundAll = 0;
+    for (const el of State.state.elements) {
+      totals.set(el.category, (totals.get(el.category) || 0) + 1);
+      totalAll++;
+      if (State.isDiscovered(el.id)) {
+        founds.set(el.category, (founds.get(el.category) || 0) + 1);
+        foundAll++;
+      }
+    }
+    for (const node of tabsEl.querySelectorAll('.cat-count')) {
+      const cat = node.dataset.cat;
+      if (cat === 'all') {
+        node.textContent = foundAll + '/' + totalAll;
+      } else {
+        const f = founds.get(cat) || 0;
+        const t = totals.get(cat) || 0;
+        node.textContent = f + '/' + t;
+      }
     }
   }
 
@@ -81,8 +112,7 @@
       for (const el of els) listEl.appendChild(buildLibTile(el));
     }
 
-    document.getElementById('discovery-count').textContent =
-      State.state.discovered.size + ' / ' + State.state.totalElements + ' discovered';
+    updateTabCounts();
   }
 
   function buildLibTile(el) {
