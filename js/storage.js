@@ -3,7 +3,9 @@
   'use strict';
 
   const KEY = 'alchemy_save_v1';
-  const VERSION = 1;
+  // Bumped from 1 → 2 when the gameplay shifted to the Circle of Binding.
+  // Saves below this version are no longer compatible.
+  const VERSION = 2;
 
   function load() {
     try {

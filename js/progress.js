@@ -38,6 +38,12 @@
       lastTheme = rank.theme;
     }
 
+    // Sync the Circle's slot count with the current rank. The Circle decides
+    // whether this is a change and runs the unlock cutscene itself.
+    if (window.Circle && Circle.setSlotCountForRank) {
+      Circle.setSlotCountForRank(rank.theme);
+    }
+
     // Show a rank-up banner the first time a new rank is reached
     // (but not on initial page load, when lastRankTitle is null).
     if (lastRankTitle !== null && rank.title !== lastRankTitle) {

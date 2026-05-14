@@ -18,11 +18,14 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=EB+Garamond:ital@0;1&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/splash.css?v=24">
-  <link rel="stylesheet" href="css/main.css?v=24">
-  <link rel="stylesheet" href="css/icons.css?v=24">
-  <link rel="stylesheet" href="css/workspace.css?v=24">
-  <link rel="stylesheet" href="css/themes.css?v=24">
+  <link rel="stylesheet" href="css/splash.css?v=49">
+  <link rel="stylesheet" href="css/main.css?v=49">
+  <link rel="stylesheet" href="css/icons.css?v=49">
+  <link rel="stylesheet" href="css/workspace.css?v=49">
+  <link rel="stylesheet" href="css/circle.css?v=49">
+  <link rel="stylesheet" href="css/themes.css?v=49">
+  <link rel="stylesheet" href="css/seasons.css?v=49">
+  <link rel="stylesheet" href="css/lineage.css?v=49">
 </head>
 <body>
   <div id="app">
@@ -37,6 +40,7 @@
         <span id="discovery-count">0 / 0</span>
       </div>
       <div class="actions">
+        <button id="btn-graph" class="ghost" title="See the Tree of Forging">Tree</button>
         <button id="btn-saves" class="ghost" title="Save / load games">Saves</button>
         <button id="btn-settings" class="ghost" title="UI settings">Settings</button>
         <button id="btn-about" class="ghost" title="About this game">About</button>
@@ -56,8 +60,20 @@
 
     <main id="stage">
       <section id="workspace" aria-label="Workspace">
-        <div id="workspace-surface"></div>
-        <div id="discovery-banner" class="hidden" aria-live="polite"></div>
+        <div id="circle-board" data-slot-count="2">
+          <svg id="sigil" preserveAspectRatio="none" aria-hidden="true"></svg>
+          <svg id="channels" preserveAspectRatio="none" viewBox="0 0 100 100" aria-hidden="true"></svg>
+          <div id="crucible" aria-hidden="true">
+            <div class="crucible-ring"></div>
+            <div class="crucible-core"></div>
+          </div>
+          <div id="slots"></div>
+          <div id="sparks" aria-hidden="true"></div>
+          <div id="result-emerge" class="result-emerge hidden" aria-hidden="true"></div>
+        </div>
+        <h2 id="reveal-name" class="reveal-name" aria-live="polite"></h2>
+        <div id="reveal-sub" class="reveal-sub" aria-live="polite"></div>
+        <div id="circle-hint" class="circle-hint">Drag two elements into the circle.</div>
       </section>
 
       <aside id="library" aria-label="Discovered elements">
@@ -76,6 +92,43 @@
     </main>
 
     <div id="loading">Awakening the elements…</div>
+
+    <div id="lineage-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="lineage-title">
+      <div class="modal-backdrop" data-close></div>
+      <div class="modal-card lineage-card">
+        <button class="modal-close" data-close aria-label="Close">✕</button>
+        <h2 id="lineage-title" class="modal-title">Lineage</h2>
+        <div class="modal-body lineage-body">
+          <div id="lineage-content"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="graph-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="graph-title">
+      <div class="modal-backdrop" data-close></div>
+      <div class="modal-card graph-card">
+        <button class="modal-close" data-close aria-label="Close">✕</button>
+        <h2 id="graph-title" class="modal-title">The Tree of Forging</h2>
+        <p class="modal-flavor">Every element you have discovered, branching from the four primal seeds.</p>
+        <div id="graph-canvas" class="graph-canvas"></div>
+      </div>
+    </div>
+
+    <div id="legacy-saves-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="legacy-title">
+      <div class="modal-backdrop" data-close></div>
+      <div class="modal-card legacy-card">
+        <div class="legacy-glyph" aria-hidden="true">⚗</div>
+        <h2 id="legacy-title" class="modal-title">A New Era Begins</h2>
+        <div class="modal-body">
+          <p class="modal-flavor">The workshop has been reshaped. What was once a cluttered bench is now the <strong>Circle of Binding</strong> — slots, sigils, channels of fire.</p>
+          <p>Your previous saves were forged under the old laws and can no longer be carried forward. We're sorry — you'll need to begin your journey anew.</p>
+          <p class="legacy-comfort">Your discoveries will return more meaningfully this time. The deepest miracles now require the broader circles, unlocked through rank.</p>
+          <div class="legacy-actions">
+            <button type="button" class="legacy-ok" data-close>I understand — begin again</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <div id="rotate-prompt" aria-hidden="true">
       <div class="rotate-art" aria-hidden="true">
@@ -221,19 +274,26 @@
 
   </div>
 
-  <script src="js/splash.js?v=24"></script>
-  <script src="data/elements.js?v=24"></script>
-  <script src="data/recipes.js?v=24"></script>
-  <script src="js/storage.js?v=24"></script>
-  <script src="js/state.js?v=24"></script>
-  <script src="js/recipes.js?v=24"></script>
-  <script src="js/ranks.js?v=24"></script>
-  <script src="js/icons.js?v=24"></script>
-  <script src="js/progress.js?v=24"></script>
-  <script src="js/saves.js?v=24"></script>
-  <script src="js/settings.js?v=24"></script>
-  <script src="js/sidebar.js?v=24"></script>
-  <script src="js/workspace.js?v=24"></script>
-  <script src="js/main.js?v=24"></script>
+  <script src="js/splash.js?v=49"></script>
+  <script src="data/elements.js?v=49"></script>
+  <script src="data/recipes.js?v=49"></script>
+  <script src="data/multi_recipes.js?v=49"></script>
+  <script src="js/storage.js?v=49"></script>
+  <script src="js/state.js?v=49"></script>
+  <script src="js/recipes.js?v=49"></script>
+  <script src="js/multi_recipes.js?v=49"></script>
+  <script src="js/ranks.js?v=49"></script>
+  <script src="js/icons.js?v=49"></script>
+  <script src="js/progress.js?v=49"></script>
+  <script src="js/saves.js?v=49"></script>
+  <script src="js/tutorial.js?v=49"></script>
+  <script src="js/lineage.js?v=49"></script>
+  <script src="js/graph.js?v=49"></script>
+  <script src="js/seasons.js?v=49"></script>
+  <script src="js/settings.js?v=49"></script>
+  <script src="js/sidebar.js?v=49"></script>
+  <script src="js/circle.js?v=49"></script>
+  <script src="js/workspace.js?v=49"></script>
+  <script src="js/main.js?v=49"></script>
 </body>
 </html>

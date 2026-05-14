@@ -160,8 +160,8 @@
 /* ===== Rank-up banner ===== */
 .rank-up-banner {
   position: fixed;
-  top: 28%;
-  left: 50%;
+  top: calc(50% + var(--board-offset-y, 0px));
+  left: calc(50% + var(--board-offset-x, 0px));
   transform: translate(-50%, -50%);
   z-index: 1500;
   text-align: center;

@@ -198,27 +198,156 @@ button.danger:hover { background: rgba(196,49,74,0.15); }
 
 .hidden { display: none !important; }
 
+/* Tutorial system — first-run + rank-unlock lessons */
+.tutorial-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 3500;
+  pointer-events: none;  /* card turns this back on for itself */
+}
+.tutorial-highlight {
+  position: fixed;
+  border: 2px solid var(--gold-bright);
+  border-radius: 14px;
+  box-shadow: 0 0 26px rgba(255,210,63,0.6), inset 0 0 18px rgba(255,210,63,0.18);
+  pointer-events: none;
+  animation: tutorial-pulse 1.6s ease-in-out infinite;
+}
+@keyframes tutorial-pulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(255,210,63,0.4), inset 0 0 14px rgba(255,210,63,0.12); border-color: rgba(255,210,63,0.7); }
+  50%      { box-shadow: 0 0 36px rgba(255,210,63,0.85), inset 0 0 22px rgba(255,210,63,0.3); border-color: var(--gold-bright); }
+}
+.tutorial-card {
+  position: fixed;
+  max-width: 360px;
+  background: linear-gradient(180deg, var(--bg-mid), var(--bg-deep));
+  border: 1px solid var(--gold);
+  border-radius: 12px;
+  padding: 18px 22px 14px;
+  box-shadow: var(--glow), 0 12px 32px rgba(0,0,0,0.6);
+  pointer-events: auto;
+  color: var(--parchment);
+  animation: tutorial-card-in 0.35s cubic-bezier(0.2, 1, 0.3, 1);
+}
+@keyframes tutorial-card-in {
+  from { opacity: 0; transform: translateY(8px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.tutorial-step-counter {
+  font-family: 'Cinzel', serif;
+  font-size: 9px;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  margin-bottom: 4px;
+}
+.tutorial-title {
+  margin: 0 0 8px;
+  font-family: 'Cinzel', serif;
+  font-size: 16px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold-bright);
+}
+.tutorial-body {
+  margin: 0 0 14px;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--parchment-dim);
+}
+.tutorial-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+.tutorial-skip {
+  background: transparent;
+  border: none;
+  color: var(--ink-mute);
+  padding: 6px 8px;
+  letter-spacing: 0.14em;
+  font-size: 10px;
+}
+.tutorial-skip:hover { color: var(--parchment-dim); background: transparent; box-shadow: none; }
+.tutorial-next {
+  background: var(--bg-soft);
+  color: var(--gold-bright);
+  border: 1px solid var(--gold);
+  padding: 8px 18px;
+  letter-spacing: 0.16em;
+  font-size: 11px;
+}
+.tutorial-next:hover { background: rgba(216,168,56,0.12); box-shadow: var(--glow); }
+
+/* Legacy-saves modal — shown once when the player's old saves get wiped */
+.legacy-card { max-width: 520px; text-align: center; }
+.legacy-glyph {
+  font-size: 64px;
+  color: var(--gold-bright);
+  margin: 4px 0 12px;
+  text-shadow: 0 0 24px rgba(243,197,74,0.6), 0 0 48px rgba(255,122,28,0.35);
+}
+.legacy-card .modal-flavor { font-size: 16px; margin-bottom: 14px !important; }
+.legacy-card .modal-flavor strong {
+  color: var(--gold-bright);
+  font-style: normal;
+  font-family: 'Cinzel', serif;
+  letter-spacing: 0.08em;
+}
+.legacy-card .modal-body p {
+  font-size: 15px;
+  color: var(--parchment-dim);
+  line-height: 1.55;
+  margin: 0 0 12px;
+}
+.legacy-comfort {
+  font-style: italic;
+  color: var(--ink-dim) !important;
+  border-top: 1px solid var(--border);
+  padding-top: 14px;
+  margin-top: 8px !important;
+}
+.legacy-actions {
+  margin-top: 22px;
+  display: flex;
+  justify-content: center;
+}
+.legacy-ok {
+  background: var(--bg-soft);
+  color: var(--gold-bright);
+  border: 1px solid var(--gold);
+  padding: 12px 26px;
+  letter-spacing: 0.16em;
+  font-weight: 700;
+}
+.legacy-ok:hover { background: rgba(216,168,56,0.12); box-shadow: var(--glow); }
+
 /* About modal */
 .modal {
   position: fixed;
   inset: 0;
   z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
+  pointer-events: none;  /* backdrop and card take it back individually */
 }
 .modal-backdrop {
-  position: absolute;
+  position: fixed;
   inset: 0;
   background: rgba(7, 5, 13, 0.75);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
+  pointer-events: auto;
 }
 .modal-card {
-  position: relative;
+  /* Centre directly on the BOARD, not the viewport (the library would
+     otherwise skew the centring off to one side). */
+  position: fixed;
+  top:  calc(50% + var(--board-offset-y, 0px));
+  left: calc(50% + var(--board-offset-x, 0px));
+  transform: translate(-50%, -50%);
+  pointer-events: auto;
   max-width: 520px;
-  width: 100%;
+  width: calc(100% - 48px);
   max-height: 85vh;
   overflow-y: auto;
   background: linear-gradient(180deg, var(--bg-mid), var(--bg-deep));

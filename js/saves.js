@@ -5,7 +5,9 @@
   'use strict';
 
   const SLOT_COUNT = 5;
-  const SCHEMA_VERSION = 1;
+  // Bumped from 1 → 2 when the gameplay shifted to the Circle of Binding.
+  // Saves below this version are no longer compatible.
+  const SCHEMA_VERSION = 2;
   const KEY_PREFIX = 'alchemy_slot_';
 
   // --- Storage --------------------------------------------------------------

@@ -155,6 +155,15 @@
     nm.textContent = el.name;
     t.appendChild(nm);
     Workspace.attachLibraryDragSource(t, el.id);
+    // Click (no significant drag) opens the lineage panel. The browser only
+    // fires click after a press-release without enough movement to count as
+    // a drag, so this naturally cohabits with the drag-source above.
+    t.addEventListener('click', (e) => {
+      // If a drag-ghost is still around, the player just finished a drag —
+      // don't open lineage in that case.
+      if (document.querySelector('.drag-ghost')) return;
+      if (window.Lineage && Lineage.open) Lineage.open(el.id);
+    });
     return t;
   }
 

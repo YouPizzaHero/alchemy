@@ -1,0 +1,235 @@
+[
+  {
+    "inputs": [
+      "water",
+      "earth",
+      "fire"
+    ],
+    "result": "primordial"
+  },
+  {
+    "inputs": [
+      "human",
+      "sword",
+      "magic"
+    ],
+    "result": "knight"
+  },
+  {
+    "inputs": [
+      "knight",
+      "magic",
+      "soul"
+    ],
+    "result": "paladin"
+  },
+  {
+    "inputs": [
+      "gold",
+      "crystal",
+      "magic"
+    ],
+    "result": "relic"
+  },
+  {
+    "inputs": [
+      "knowledge",
+      "idea",
+      "time"
+    ],
+    "result": "wisdom"
+  },
+  {
+    "inputs": [
+      "moon",
+      "sun",
+      "star"
+    ],
+    "result": "cosmos"
+  },
+  {
+    "inputs": [
+      "soul",
+      "corpse",
+      "magic"
+    ],
+    "result": "lich"
+  },
+  {
+    "inputs": [
+      "water",
+      "fire",
+      "earth",
+      "air"
+    ],
+    "result": "aether"
+  },
+  {
+    "inputs": [
+      "love",
+      "dream",
+      "idea",
+      "magic"
+    ],
+    "result": "inspiration"
+  },
+  {
+    "inputs": [
+      "music",
+      "love",
+      "dream",
+      "magic"
+    ],
+    "result": "muse"
+  },
+  {
+    "inputs": [
+      "gold",
+      "diamond",
+      "magic",
+      "crystal"
+    ],
+    "result": "philosopher_stone"
+  },
+  {
+    "inputs": [
+      "water",
+      "earth",
+      "fire",
+      "air",
+      "life"
+    ],
+    "result": "eden"
+  },
+  {
+    "inputs": [
+      "horse",
+      "magic",
+      "horn"
+    ],
+    "result": "unicorn"
+  },
+  {
+    "inputs": [
+      "human",
+      "wolf",
+      "moon"
+    ],
+    "result": "werewolf"
+  },
+  {
+    "inputs": [
+      "human",
+      "blood",
+      "night"
+    ],
+    "result": "vampire"
+  },
+  {
+    "inputs": [
+      "dragon",
+      "fire",
+      "soul"
+    ],
+    "result": "phoenix"
+  },
+  {
+    "inputs": [
+      "house",
+      "farm",
+      "road"
+    ],
+    "result": "village"
+  },
+  {
+    "inputs": [
+      "village",
+      "road",
+      "house"
+    ],
+    "result": "city"
+  },
+  {
+    "inputs": [
+      "city",
+      "wall",
+      "stone"
+    ],
+    "result": "castle"
+  },
+  {
+    "inputs": [
+      "corpse",
+      "life",
+      "magic"
+    ],
+    "result": "zombie"
+  },
+  {
+    "inputs": [
+      "wizard",
+      "magic",
+      "cat"
+    ],
+    "result": "witch"
+  },
+  {
+    "inputs": [
+      "bread",
+      "cheese",
+      "fire"
+    ],
+    "result": "pizza"
+  },
+  {
+    "inputs": [
+      "angel",
+      "cosmos",
+      "soul"
+    ],
+    "result": "god"
+  },
+  {
+    "inputs": [
+      "boat",
+      "wood",
+      "iron"
+    ],
+    "result": "ship"
+  },
+  {
+    "inputs": [
+      "human",
+      "fire",
+      "soul"
+    ],
+    "result": "demon"
+  },
+  {
+    "inputs": [
+      "chest",
+      "gold",
+      "gem",
+      "diamond"
+    ],
+    "result": "treasure"
+  },
+  {
+    "inputs": [
+      "gun",
+      "metal",
+      "gunpowder",
+      "fire"
+    ],
+    "result": "bullet"
+  },
+  {
+    "inputs": [
+      "crystal",
+      "crystal",
+      "pressure",
+      "time"
+    ],
+    "result": "diamond"
+  }
+]

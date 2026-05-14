@@ -1,0 +1,260 @@
+/* ============================================================
+   LINEAGE PANEL — drill into any discovered element to see its
+   recipe and what it makes.
+   ============================================================ */
+/* Tree and Lineage are content-heavy — keep them centred to the entire
+   viewport, not just the board, so they get the full screen real-estate. */
+#lineage-modal .modal-card,
+#graph-modal   .modal-card {
+  top:  50%;
+  left: 50%;
+}
+
+/* Lineage opens from the Tree — sit above it so the drill-in is visible. */
+#lineage-modal { z-index: 1100; }
+
+.lineage-card {
+  max-width: 580px;
+  width: 92%;
+}
+.lineage-body { padding-top: 4px; }
+
+.lineage-head {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 18px;
+}
+.lineage-icon-wrap {
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.lineage-icon-wrap .icon {
+  width: 56px;
+  height: 56px;
+}
+.lineage-head-text {
+  flex: 1;
+}
+.lineage-name {
+  font-family: 'Cinzel', serif;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold-bright);
+  margin-bottom: 4px;
+}
+.lineage-cat {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+
+.lineage-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.lineage-section h3 {
+  margin: 0 0 10px;
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.lineage-empty {
+  margin: 0;
+  font-style: italic;
+  color: var(--ink-mute);
+  font-size: 14px;
+}
+
+.lineage-recipe {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 9px 12px;
+  background: rgba(42,28,68,0.4);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  margin-bottom: 8px;
+}
+.lineage-plus, .lineage-arrow {
+  color: var(--gold);
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+}
+.lineage-arrow {
+  color: var(--gold-bright);
+  font-size: 16px;
+  padding: 0 4px;
+}
+.lineage-tag {
+  margin-left: auto;
+  padding: 2px 8px;
+  font-family: 'Cinzel', serif;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold-bright);
+  background: rgba(216,168,56,0.12);
+  border: 1px solid var(--gold);
+  border-radius: 10px;
+}
+
+.lineage-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px 5px 6px;
+  background: var(--bg-soft);
+  border: 1px solid var(--border-light);
+  border-radius: 16px;
+  color: var(--parchment);
+  font-family: 'EB Garamond', Georgia, serif;
+  font-size: 14px;
+  cursor: pointer;
+  min-height: 28px;
+  transition: background 0.12s ease, border-color 0.12s ease, transform 0.06s ease;
+}
+.lineage-chip:hover {
+  background: var(--bg-mid);
+  border-color: var(--gold);
+  box-shadow: none;
+}
+.lineage-chip:active { transform: scale(0.96); }
+.lineage-chip-focus {
+  border-color: var(--gold-bright);
+  background: rgba(216,168,56,0.18);
+}
+.lineage-chip-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  box-shadow: 0 0 6px var(--tint, var(--gold)), inset 0 0 0 1px rgba(0,0,0,0.3);
+  flex-shrink: 0;
+}
+.lineage-chip-name {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.lineage-chip-unknown {
+  background: transparent;
+  color: var(--ink-mute);
+  font-style: italic;
+  cursor: default;
+  border-style: dashed;
+}
+.lineage-chip-unknown:hover { background: transparent; border-color: var(--border); box-shadow: none; }
+
+@media (max-width: 600px) {
+  .lineage-name { font-size: 20px; }
+  .lineage-recipe { padding: 8px; gap: 5px; }
+  .lineage-chip { font-size: 12px; padding: 4px 8px 4px 5px; }
+}
+
+/* ============================================================
+   GRAPH (Tree of Forging) — tiered layout of every discovery.
+   ============================================================ */
+.graph-card {
+  max-width: 92vw;
+  width: 92vw;
+  max-height: 88vh;
+}
+.graph-canvas {
+  margin-top: 12px;
+  max-height: 70vh;
+  overflow-y: auto;
+  padding: 8px 4px 20px;
+}
+.graph-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.graph-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding-bottom: 14px;
+  border-bottom: 1px dashed var(--border);
+}
+.graph-row:last-child { border-bottom: none; }
+.graph-tier-label {
+  flex-shrink: 0;
+  width: 80px;
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  padding-top: 4px;
+}
+.graph-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  flex: 1;
+}
+.graph-node {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 9px 4px 5px;
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  color: var(--parchment);
+  cursor: pointer;
+  min-height: 26px;
+  transition: background 0.12s ease, border-color 0.12s ease, transform 0.06s ease;
+}
+.graph-node:hover {
+  border-color: var(--gold);
+  background: var(--bg-mid);
+  box-shadow: var(--glow);
+  transform: translateY(-1px);
+}
+.graph-node-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  box-shadow: 0 0 4px var(--tint, var(--gold));
+  flex-shrink: 0;
+}
+.graph-node-name {
+  font-family: 'Cinzel', serif;
+  font-size: 9.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.graph-empty {
+  text-align: center;
+  color: var(--ink-mute);
+  font-style: italic;
+  padding: 40px;
+}
+.graph-stats {
+  text-align: center;
+  margin-top: 18px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+}

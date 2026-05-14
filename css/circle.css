@@ -1,0 +1,739 @@
+/* ============================================================
+   CIRCLE-BOARD — the new gameplay surface.
+   Slots are arranged around a central crucible. Burning ley-lines
+   ignite when all visible slots are filled; the result rises from
+   the crucible with a glowing burn-in of its true name.
+   ============================================================ */
+
+#circle-board {
+  position: absolute;
+  inset: 0;
+  margin: 24px;
+  display: block;
+  pointer-events: none;  /* slots/crucible turn this back on individually */
+}
+
+/* ---------- Alchemical sigil background ---------- */
+#sigil {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.65;
+  filter: drop-shadow(0 0 6px rgba(216,168,56,0.18));
+  transition: opacity 0.6s ease;
+}
+.sigil-ring,
+.sigil-shape,
+.sigil-axis {
+  fill: none;
+  stroke: rgba(216,168,56,0.55);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.sigil-outer { stroke-width: 1.6; stroke: rgba(216,168,56,0.65); }
+.sigil-inner { stroke-width: 1.2; stroke: rgba(255,210,63,0.7); stroke-dasharray: 4 6; }
+.sigil-mid   { stroke-width: 1; stroke: rgba(216,168,56,0.4); stroke-dasharray: 3 8; }
+.sigil-shape { stroke-width: 1.2; stroke: rgba(216,168,56,0.45); }
+.sigil-poly  { stroke-width: 1.5; stroke: rgba(216,168,56,0.55); }
+.sigil-star  { stroke-width: 1.5; stroke: rgba(255,210,63,0.6); fill: rgba(255,210,63,0.02); }
+.sigil-thin  { stroke-width: 0.8; stroke: rgba(216,168,56,0.3); }
+.sigil-axis  { stroke-width: 0.7; stroke: rgba(216,168,56,0.3); stroke-dasharray: 2 6; }
+
+/* Slow rotation for the outer ring — the wheel of the heavens turning. */
+@keyframes sigil-spin {
+  to { transform: rotate(360deg); }
+}
+#sigil .sigil-outer {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: sigil-spin 240s linear infinite;
+}
+
+/* Subtle pulse on the inner ring during brewing */
+#circle-board.brewing #sigil .sigil-inner {
+  stroke: rgba(255,210,63,1);
+  animation: sigil-pulse 1.2s ease-in-out infinite;
+}
+@keyframes sigil-pulse {
+  0%, 100% { opacity: 0.6; stroke-width: 1.2; }
+  50%      { opacity: 1;   stroke-width: 2; filter: drop-shadow(0 0 4px #ff7a1c); }
+}
+
+/* ---------- SVG channels (the burning ley-lines) ---------- */
+#channels {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible;
+  /* Lifted above the crucible so arcs around its perimeter aren't hidden. */
+  z-index: 4;
+}
+.channel-line {
+  fill: none;
+  stroke: rgba(216,168,56,0.22);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  /* stroke-dasharray and stroke-dashoffset are set inline by JS
+     (equal to the path's total length, so animation draws the whole path
+     from slot → crucible edge → arc around crucible). */
+  filter: drop-shadow(0 0 1px rgba(216,168,56,0.4));
+}
+.channel-line.ignited {
+  stroke: #ffd23f;
+  stroke-width: 4;
+  /* Override the inline dashoffset (= length) with 0 to reveal the whole path. */
+  stroke-dashoffset: 0 !important;
+  filter: drop-shadow(0 0 4px #ff7a1c) drop-shadow(0 0 8px #ffd23f);
+  transition: stroke-dashoffset 1.1s cubic-bezier(0.4, 0, 0.2, 1),
+              stroke 0.3s ease,
+              filter 0.3s ease,
+              stroke-width 0.3s ease;
+}
+
+/* ---------- Crucible ---------- */
+#crucible {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 110px;
+  height: 110px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 2;
+  transition: transform 0.18s ease, filter 0.18s ease;
+}
+/* Becomes tappable when 2+ slots are filled but not auto-firing yet. */
+#crucible.ready {
+  pointer-events: auto;
+  cursor: pointer;
+  animation: crucible-ready-pulse 1.4s ease-in-out infinite;
+}
+#crucible.ready .crucible-ring {
+  border-color: var(--gold-bright);
+  box-shadow:
+    inset 0 0 28px rgba(0,0,0,0.65),
+    0 0 24px rgba(255,210,63,0.55),
+    0 0 48px rgba(255,122,28,0.3);
+}
+#crucible.ready .crucible-core {
+  animation: crucible-ready-core 1.4s ease-in-out infinite;
+}
+#crucible.ready:hover {
+  transform: translate(-50%, -50%) scale(1.06);
+  filter: brightness(1.15);
+}
+#crucible.ready:active {
+  transform: translate(-50%, -50%) scale(0.96);
+}
+@keyframes crucible-ready-pulse {
+  0%, 100% { filter: drop-shadow(0 0 6px rgba(255,210,63,0.3)); }
+  50%      { filter: drop-shadow(0 0 18px rgba(255,210,63,0.7)); }
+}
+@keyframes crucible-ready-core {
+  0%, 100% { transform: translate(-50%, -50%) scale(1.05); opacity: 0.7; }
+  50%      { transform: translate(-50%, -50%) scale(1.3); opacity: 1; background: radial-gradient(circle, rgba(255,230,140,0.85), rgba(255,140,40,0.4) 50%, transparent 100%); }
+}
+.crucible-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid rgba(216,168,56,0.4);
+  box-shadow:
+    inset 0 0 24px rgba(0,0,0,0.65),
+    0 0 18px rgba(216,168,56,0.15);
+  background:
+    radial-gradient(circle at 50% 60%, rgba(255,140,40,0.25), rgba(40,15,55,0.5) 50%, rgba(10,5,20,0.9));
+}
+.crucible-core {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(255,200,80,0.6), rgba(216,100,30,0.25) 60%, transparent 100%);
+  opacity: 0.7;
+  animation: crucible-flicker 3s ease-in-out infinite alternate;
+}
+@keyframes crucible-flicker {
+  0%   { transform: translate(-50%, -50%) scale(1);    opacity: 0.55; }
+  100% { transform: translate(-50%, -50%) scale(1.08); opacity: 0.85; }
+}
+#circle-board.brewing .crucible-core {
+  animation: crucible-burn 0.8s ease-out forwards;
+}
+@keyframes crucible-burn {
+  0%   { transform: translate(-50%, -50%) scale(1);   opacity: 0.7; background: radial-gradient(circle, rgba(255,200,80,0.6), transparent); }
+  60%  { transform: translate(-50%, -50%) scale(2.2); opacity: 1;   background: radial-gradient(circle, #fff4c8, #ffd23f 30%, #e8541a 70%); }
+  100% { transform: translate(-50%, -50%) scale(0.6); opacity: 0.6; }
+}
+
+/* ---------- Slots ---------- */
+#slots {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+}
+.slot {
+  position: absolute;
+  width: 96px;
+  height: 96px;
+  margin: -48px 0 0 -48px;  /* center on (left, top) */
+  border-radius: 50%;
+  border: 2px dashed rgba(216,168,56,0.35);
+  background:
+    radial-gradient(circle at 50% 50%, rgba(216,168,56,0.05), rgba(20,10,40,0.5) 70%);
+  box-shadow: 0 0 12px rgba(216,168,56,0.08), inset 0 0 16px rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 4px;
+  pointer-events: auto;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease,
+              opacity 0.4s ease, background 0.25s ease;
+}
+.slot.appearing {
+  animation: slot-appear 0.7s cubic-bezier(0.34, 1.6, 0.64, 1) backwards;
+}
+@keyframes slot-appear {
+  0%   { opacity: 0; transform: scale(0.3) rotate(-30deg); }
+  60%  { opacity: 1; transform: scale(1.1) rotate(8deg); }
+  100% { opacity: 1; transform: scale(1) rotate(0); }
+}
+.slot.hover,
+.slot.drag-over {
+  border-color: var(--gold-bright);
+  box-shadow: 0 0 24px rgba(255,210,63,0.5), inset 0 0 16px rgba(255,210,63,0.15);
+  transform: scale(1.06);
+}
+.slot.filled {
+  border-style: solid;
+  border-color: var(--gold);
+  box-shadow: 0 0 18px rgba(255,210,63,0.35), inset 0 0 16px rgba(255,210,63,0.1);
+  background:
+    radial-gradient(circle at 50% 50%, rgba(216,168,56,0.18), rgba(20,10,40,0.7) 70%);
+  animation: slot-fill-pulse 0.55s ease-out;
+}
+@keyframes slot-fill-pulse {
+  0%   { transform: scale(1.18); box-shadow: 0 0 36px rgba(255,210,63,0.7), inset 0 0 22px rgba(255,210,63,0.3); }
+  100% { transform: scale(1);     box-shadow: 0 0 18px rgba(255,210,63,0.35), inset 0 0 16px rgba(255,210,63,0.1); }
+}
+.slot .slot-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  pointer-events: none;  /* clicks pass through to slot for clearing */
+}
+.slot .slot-icon { width: 48px; height: 48px; }
+.slot .slot-name {
+  font-family: 'Cinzel', serif;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--parchment);
+  text-shadow: 0 0 6px rgba(0,0,0,0.7);
+}
+.slot .slot-close {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 22px;
+  height: 22px;
+  min-height: 22px;
+  padding: 0;
+  border-radius: 50%;
+  background: var(--bg-deep);
+  color: var(--parchment-dim);
+  border: 1px solid var(--border-light);
+  font-size: 12px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.slot.filled:hover .slot-close { display: flex; }
+.slot .slot-close:hover { background: var(--danger); color: white; border-color: var(--danger); }
+.slot.empty .slot-content { opacity: 0; }
+.slot.empty::before {
+  content: '';
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: rgba(216,168,56,0.45);
+  box-shadow: 0 0 12px rgba(255,210,63,0.6);
+  position: absolute;
+  animation: slot-empty-pulse 2.2s ease-in-out infinite;
+}
+@keyframes slot-empty-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.5; }
+  50%      { transform: scale(1.4); opacity: 1; }
+}
+
+/* ---------- Brewing state (channels ignited) ---------- */
+#circle-board.brewing .slot.filled {
+  border-color: #ff8c3a;
+  box-shadow:
+    0 0 32px rgba(255,140,58,0.7),
+    inset 0 0 22px rgba(255,180,80,0.3);
+  animation: slot-brewing 1.4s ease-in-out;
+}
+@keyframes slot-brewing {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.08); }
+  100% { transform: scale(0.92); opacity: 0.85; }
+}
+
+/* ---------- Sparks (escape from crucible at the burst) ---------- */
+#sparks {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+}
+.sparkle {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #ffd23f;
+  box-shadow: 0 0 10px #ffd23f, 0 0 18px #ff7a1c;
+  animation: sparkle 0.9s ease-out forwards;
+}
+@keyframes sparkle {
+  0%   { transform: translate(0,0) scale(1); opacity: 1; }
+  100% { transform: translate(var(--dx), var(--dy)) scale(0.1); opacity: 0; }
+}
+
+/* ---------- Result emergence ---------- */
+.result-emerge {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.2);
+  pointer-events: none;
+  opacity: 0;
+  z-index: 6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.result-emerge.hidden { display: none; }
+.result-emerge.rising {
+  /* The result blooms out of the crucible, hovers briefly above it with a gentle bob,
+     then settles back to centred — gives the audience a moment to register what was made. */
+  animation: result-rise 2.4s cubic-bezier(0.2, 1, 0.3, 1) forwards;
+}
+@keyframes result-rise {
+  0%   { opacity: 0; transform: translate(-50%, -30%) scale(0.2); filter: blur(8px) brightness(2.5); }
+  25%  { opacity: 1; transform: translate(-50%, -90%) scale(1.3);  filter: blur(0) brightness(1.7); }
+  40%  { opacity: 1; transform: translate(-50%, -95%) scale(1.15); filter: brightness(1.4); }
+  55%  { opacity: 1; transform: translate(-50%, -85%) scale(1.18); filter: brightness(1.3); }
+  70%  { opacity: 1; transform: translate(-50%, -78%) scale(1.10); filter: brightness(1.15); }
+  100% { opacity: 1; transform: translate(-50%, -50%) scale(1);    filter: brightness(1); }
+}
+.result-emerge.fading {
+  animation: result-fade 0.6s ease forwards;
+}
+@keyframes result-fade {
+  to { opacity: 0; transform: translate(-50%, -70%) scale(0.95); }
+}
+.result-emerge .icon { width: 64px; height: 64px; }
+.result-emerge .result-name {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold-bright);
+  text-shadow: 0 0 10px rgba(255,210,63,0.5);
+}
+
+/* ---------- Name burn-in (top of board, like the Ring) ---------- */
+.reveal-name {
+  position: absolute;
+  top: 22px;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  z-index: 4;
+  font-family: 'Cinzel', serif;
+  font-size: clamp(26px, 4.5vw, 44px);
+  font-weight: 700;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  text-align: center;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, #fff4c8 0%, #ffd23f 35%, #ff7a1c 65%, #8a0a0a 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 14px rgba(255, 122, 28, 0.85))
+          drop-shadow(0 0 28px rgba(255, 80, 0, 0.55));
+}
+.reveal-name.burning {
+  animation: name-burn-in 1s cubic-bezier(0.2, 1, 0.3, 1) forwards,
+             name-burn-out 1.2s ease 2.6s forwards;
+}
+@keyframes name-burn-in {
+  0%   { opacity: 0; filter: drop-shadow(0 0 32px rgba(255,80,0,0)) blur(8px); letter-spacing: 0.05em; }
+  50%  { opacity: 1; filter: drop-shadow(0 0 30px rgba(255,130,30,1)) blur(0); letter-spacing: 0.35em; }
+  100% { opacity: 1; filter: drop-shadow(0 0 14px rgba(255,122,28,0.85)) drop-shadow(0 0 28px rgba(255,80,0,0.55)); letter-spacing: 0.32em; }
+}
+@keyframes name-burn-out {
+  0%   { opacity: 1; transform: translate(-50%, 0) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -8px) scale(0.97); filter: drop-shadow(0 0 4px rgba(120,30,0,0.2)) blur(2px); }
+}
+
+.reveal-sub {
+  position: absolute;
+  top: calc(22px + clamp(34px, 5.5vw, 56px));
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--parchment-dim);
+  text-shadow: 0 0 8px rgba(0,0,0,0.7);
+  opacity: 0;
+  z-index: 4;
+  pointer-events: none;
+  white-space: nowrap;
+}
+.reveal-sub.burning {
+  animation: reveal-sub-in 0.8s ease 0.4s forwards,
+             reveal-sub-out 0.6s ease 2.6s forwards;
+}
+@keyframes reveal-sub-in  { to { opacity: 0.9; } }
+@keyframes reveal-sub-out { to { opacity: 0; } }
+
+/* ---------- Cinematic SUCCESS overlays ---------- */
+/* Sigil-wide ignite: every inscribed line bursts bright gold in unison. */
+#sigil.flash .sigil-ring,
+#sigil.flash .sigil-shape,
+#sigil.flash .sigil-axis {
+  animation: sigil-ignite 1.5s cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+@keyframes sigil-ignite {
+  0%   { stroke: rgba(216,168,56,0.55); stroke-width: 1.2; filter: drop-shadow(0 0 0 transparent); }
+  20%  { stroke: #fff4c8; stroke-width: 3; filter: drop-shadow(0 0 14px #ffd23f) drop-shadow(0 0 28px #ff7a1c); }
+  60%  { stroke: #ffd23f; stroke-width: 2; filter: drop-shadow(0 0 8px #ffd23f); }
+  100% { stroke: rgba(216,168,56,0.55); stroke-width: 1.2; filter: drop-shadow(0 0 0 transparent); }
+}
+
+/* Four-directional pillar burst — sun-cross of light shooting outward
+   from the crucible along N/E/S/W axes. */
+.success-pillar-burst {
+  position: absolute;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  z-index: 7;
+}
+.pillar-beam {
+  position: absolute;
+  top: 0;
+  left: -35px;
+  width: 70px;
+  height: 0;
+  transform-origin: top center;
+  /* rotate is set inline per beam — 0°/90°/180°/270° */
+  background:
+    linear-gradient(180deg,
+      rgba(255,255,240,1) 0%,
+      rgba(255,230,140,0.95) 15%,
+      rgba(255,200,60,0.75) 40%,
+      rgba(255,150,40,0.45) 70%,
+      transparent 100%);
+  box-shadow: 0 0 30px rgba(255,210,63,0.6), 0 0 60px rgba(255,140,40,0.4);
+  filter: blur(2px);
+  animation: pillar-beam-grow 1.8s cubic-bezier(0.2, 0.85, 0.3, 1) forwards;
+}
+@keyframes pillar-beam-grow {
+  0%   { height: 0;    opacity: 0; width: 30px; left: -15px; }
+  18%  { height: 65vmin; opacity: 1; width: 90px; left: -45px; }
+  35%  { height: 65vmin; opacity: 1; width: 70px; left: -35px; }
+  100% { height: 65vmin; opacity: 0; width: 36px; left: -18px; }
+}
+
+/* Radial shockwave rings — expanding gold circles. */
+.success-shockwave {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  margin: -30px 0 0 -30px;
+  border: 4px solid var(--gold-bright);
+  border-radius: 50%;
+  box-shadow:
+    0 0 24px rgba(255,210,63,0.8),
+    inset 0 0 16px rgba(255,210,63,0.4);
+  animation: success-shockwave 1.4s cubic-bezier(0.18, 0.7, 0.3, 1) forwards;
+  pointer-events: none;
+  z-index: 6;
+}
+@keyframes success-shockwave {
+  0%   { opacity: 1; transform: scale(0.4); border-width: 6px; }
+  100% { opacity: 0; transform: scale(8);   border-width: 1px; }
+}
+
+/* ---------- Failure fizzle ---------- */
+#circle-board.fizzling .crucible-core {
+  animation: crucible-fizzle 1.3s ease forwards;
+}
+#circle-board.fizzling .crucible-ring {
+  animation: crucible-ring-darken 1.3s ease forwards;
+}
+@keyframes crucible-fizzle {
+  0%   { transform: translate(-50%, -50%) scale(2.2); opacity: 1;
+         background: radial-gradient(circle, #aaa 0%, #555 40%, transparent 80%);
+         filter: blur(2px); }
+  40%  { transform: translate(-50%, -50%) scale(1.6); opacity: 0.75;
+         background: radial-gradient(circle, #888, #2a2a2a); }
+  100% { transform: translate(-50%, -50%) scale(0.3); opacity: 0;
+         background: radial-gradient(circle, #3a3a3a, transparent);
+         filter: blur(6px); }
+}
+@keyframes crucible-ring-darken {
+  0%   { border-color: rgba(120,120,120,0.6); box-shadow: 0 0 32px rgba(0,0,0,0.7), inset 0 0 28px rgba(0,0,0,0.8); }
+  100% { border-color: rgba(80,70,90,0.35); box-shadow: 0 0 12px rgba(0,0,0,0.5), inset 0 0 22px rgba(0,0,0,0.6); }
+}
+
+/* Whole-board jolt — a brief shake when the brew rejects. */
+#circle-board.fail-jolt {
+  animation: board-jolt 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+}
+@keyframes board-jolt {
+  0%, 100% { transform: translate(0, 0); }
+  15%      { transform: translate(-6px, 3px) rotate(-0.4deg); }
+  30%      { transform: translate(7px, -2px) rotate(0.4deg); }
+  45%      { transform: translate(-5px, 4px) rotate(-0.3deg); }
+  60%      { transform: translate(4px, -3px); }
+  75%      { transform: translate(-2px, 1px); }
+}
+
+/* Filled slots shake like a flask that just slammed when the brew fails.
+   Slots are centred with negative margins (not translate), so we can safely
+   animate transform from origin without disturbing position. */
+.slot.fail-shake {
+  animation: slot-fail-shake 0.55s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+  border-color: #8a4a4a !important;
+  box-shadow: 0 0 20px rgba(140,40,40,0.45), inset 0 0 16px rgba(140,40,40,0.2) !important;
+}
+@keyframes slot-fail-shake {
+  0%, 100% { transform: translate(0, 0) rotate(0); }
+  15%      { transform: translate(-7px, 3px) rotate(-3deg); }
+  30%      { transform: translate(8px, -3px) rotate(3deg); }
+  50%      { transform: translate(-5px, 2px) rotate(-2deg); }
+  70%      { transform: translate(4px, -2px) rotate(1deg); }
+  85%      { transform: translate(-2px, 1px); }
+}
+
+/* Bigger, fuller smoke billowing from a failed brew. */
+.smoke {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: radial-gradient(circle,
+    rgba(200,200,200,0.55) 0%,
+    rgba(120,120,120,0.32) 35%,
+    rgba(50,50,50,0.12) 65%,
+    transparent 100%);
+  pointer-events: none;
+  filter: blur(2px);
+  animation: smoke-rise 1.6s ease-out forwards;
+}
+@keyframes smoke-rise {
+  0%   { opacity: 0;    transform: translate(0,0) scale(0.5); }
+  20%  { opacity: 0.85; }
+  100% { opacity: 0;    transform: translate(var(--dx, 0), var(--dy, -80px)) scale(var(--end-scale, 2)); filter: blur(8px); }
+}
+
+/* Small dark embers spraying outward when the brew fails. */
+.fail-ember {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #2a2024;
+  box-shadow: 0 0 6px rgba(0,0,0,0.7), 0 0 2px rgba(80,40,40,0.6);
+  pointer-events: none;
+  animation: fail-ember-fling 1s cubic-bezier(0.4, 0, 0.6, 1) forwards;
+}
+@keyframes fail-ember-fling {
+  0%   { transform: translate(0,0) scale(1.6); opacity: 1; }
+  100% { transform: translate(var(--dx), calc(var(--dy) + 40px)) scale(0.4); opacity: 0; }
+}
+
+/* ---------- Helper hint ---------- */
+.circle-hint {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'EB Garamond', Georgia, serif;
+  font-style: italic;
+  font-size: 14px;
+  color: var(--ink-dim);
+  text-shadow: 0 0 6px rgba(0,0,0,0.6);
+  pointer-events: none;
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+.circle-hint.faded { opacity: 0; }
+
+/* ============================================================
+   SLOT UNLOCK CUTSCENE
+   Fires when the rank climbs and the slot count grows.
+   ============================================================ */
+.slot-unlock-cutscene {
+  position: fixed;
+  inset: 0;
+  z-index: 4000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background:
+    radial-gradient(ellipse at 50% 40%, #2a0830 0%, #0a0218 55%, #000 100%);
+  opacity: 0;
+  cursor: pointer;
+  user-select: none;
+  padding: 32px;
+  transition: opacity 0.5s ease;
+}
+.slot-unlock-cutscene.show { opacity: 1; }
+.slot-unlock-cutscene.hide { opacity: 0; pointer-events: none; transition: opacity 0.5s ease; }
+
+.suc-rays {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 160vmax; height: 160vmax;
+  background: repeating-conic-gradient(
+    from 0deg,
+    rgba(216,168,56,0.10) 0deg 4deg,
+    transparent 4deg 24deg
+  );
+  transform: translate(-50%, -50%) scale(0.4) rotate(0deg);
+  opacity: 0;
+  animation: suc-rays-in 1s 0.2s cubic-bezier(0.34, 1.4, 0.64, 1) forwards,
+             suc-rays-spin 50s 1.2s linear infinite;
+  pointer-events: none;
+}
+@keyframes suc-rays-in {
+  to { opacity: 1; transform: translate(-50%, -50%) scale(1) rotate(10deg); }
+}
+@keyframes suc-rays-spin {
+  from { transform: translate(-50%, -50%) scale(1) rotate(10deg); }
+  to   { transform: translate(-50%, -50%) scale(1) rotate(370deg); }
+}
+
+.suc-glyph {
+  font-size: clamp(80px, 13vw, 140px);
+  color: var(--gold-bright);
+  text-shadow: 0 0 32px rgba(255,210,63,0.7), 0 0 64px rgba(255,122,28,0.5);
+  margin-bottom: 8px;
+  opacity: 0;
+  transform: scale(0.4) rotate(-10deg);
+  animation: suc-glyph-in 0.9s 0.3s cubic-bezier(0.34, 1.7, 0.64, 1) forwards;
+  z-index: 1;
+}
+@keyframes suc-glyph-in {
+  to { opacity: 1; transform: scale(1) rotate(0); }
+}
+
+.suc-title {
+  margin: 0 0 8px;
+  font-family: 'Cinzel', serif;
+  font-size: clamp(26px, 4.5vw, 44px);
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--gold-bright);
+  text-shadow: 0 0 20px rgba(255,210,63,0.6);
+  opacity: 0;
+  animation: suc-fade-up 0.7s 1.1s ease-out forwards;
+  z-index: 1;
+}
+.suc-subtitle {
+  max-width: 480px;
+  margin: 0 0 28px;
+  font-family: 'EB Garamond', Georgia, serif;
+  font-size: 17px;
+  font-style: italic;
+  color: var(--parchment-dim);
+  opacity: 0;
+  animation: suc-fade-up 0.7s 1.4s ease-out forwards;
+  z-index: 1;
+}
+.suc-subtitle strong {
+  color: var(--gold-bright);
+  font-style: normal;
+  font-family: 'Cinzel', serif;
+  letter-spacing: 0.1em;
+}
+@keyframes suc-fade-up {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.suc-preview {
+  display: flex;
+  gap: 18px;
+  margin-bottom: 26px;
+  z-index: 1;
+}
+.suc-slot {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 2px dashed rgba(216,168,56,0.5);
+  background:
+    radial-gradient(circle at 50% 50%, rgba(216,168,56,0.05), rgba(20,10,40,0.5) 70%);
+  box-shadow: inset 0 0 12px rgba(0,0,0,0.5);
+  opacity: 0;
+  transform: scale(0.5);
+}
+.suc-slot.appear {
+  animation: suc-slot-appear 0.55s cubic-bezier(0.34, 1.7, 0.64, 1) forwards;
+}
+.suc-slot.new {
+  animation: suc-slot-appear 0.55s cubic-bezier(0.34, 1.7, 0.64, 1) forwards,
+             suc-slot-glow 1.8s ease-in-out 0.6s infinite;
+}
+@keyframes suc-slot-appear {
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes suc-slot-glow {
+  0%, 100% { box-shadow: inset 0 0 12px rgba(0,0,0,0.5), 0 0 16px rgba(255,210,63,0.35); border-color: rgba(216,168,56,0.5); }
+  50%      { box-shadow: inset 0 0 18px rgba(255,210,63,0.2), 0 0 32px rgba(255,210,63,0.85); border-color: var(--gold-bright); }
+}
+
+.suc-dismiss {
+  margin: 0;
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: rgba(245, 230, 200, 0.45);
+  opacity: 0;
+  animation: suc-fade-up 0.6s 2.4s ease-out forwards,
+             suc-dismiss-pulse 1.8s 2.4s ease-in-out infinite;
+  z-index: 1;
+}
+@keyframes suc-dismiss-pulse {
+  0%, 100% { opacity: 0.35; }
+  50%      { opacity: 0.95; }
+}
