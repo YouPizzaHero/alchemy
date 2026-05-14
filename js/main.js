@@ -87,7 +87,7 @@
     if (typeof Sound   !== 'undefined') Sound.init();
     initAboutModal();
     initBoardOffset();
-    initRotateOverride();
+    initRotatePrompt();
 
     document.getElementById('loading').classList.add('hidden');
 
@@ -140,19 +140,29 @@
     });
   }
 
-  // Lets the player bypass the 'Rotate your device' prompt — used when
-  // iOS rotation lock is on so the device viewport stays portrait even
-  // after physical rotation. Once overridden, the board-offset is
-  // recomputed so popups still land where they should.
-  function initRotateOverride() {
-    const btn = document.getElementById('rotate-override');
-    if (!btn) return;
-    btn.addEventListener('click', () => {
-      document.body.classList.add('rotate-override');
-      // Trigger any layout recompute (board-offset, channels) now that
-      // the workspace is visible.
-      window.dispatchEvent(new Event('resize'));
-    });
+  // JS-driven rotate-prompt detection. iOS Safari sometimes doesn't
+  // re-evaluate CSS orientation media queries after a real rotation,
+  // so the prompt could get stuck. Instead, we check actual viewport
+  // dimensions on every event that might signal a layout change, plus
+  // a low-frequency safety poll.
+  function initRotatePrompt() {
+    function update() {
+      // Treat 'phone-sized + portrait' as 'show the prompt'. The width
+      // ceiling keeps tablets and desktops from ever seeing it.
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      const isPortraitPhone = w <= 900 && h > w;
+      document.body.classList.toggle('show-rotate-prompt', isPortraitPhone);
+    }
+    update();
+    window.addEventListener('resize',            update);
+    window.addEventListener('orientationchange', update);
+    window.addEventListener('focus',             update);
+    document.addEventListener('visibilitychange', update);
+    // Safety net for iOS Safari rotation events that occasionally don't
+    // fire the standard events — re-check once a second while the page
+    // is visible. Cheap.
+    setInterval(() => { if (!document.hidden) update(); }, 1000);
   }
 
   function initAboutModal() {
