@@ -410,12 +410,11 @@ body.layout-flipped #workspace { border-right: none; border-left: 1px solid var(
   /* Progress bar label squeezes too */
   #progress-label { font-size: 8px; letter-spacing: 0.14em; gap: 6px; }
 
-  /* Smaller slots so all 5 fit on a 5-slot circle */
-  .slot { width: 76px; height: 76px; margin: -38px 0 0 -38px; }
-  .slot .slot-icon { width: 36px; height: 36px; }
-
-  /* Crucible scales a bit smaller */
-  #crucible { width: 80px; height: 80px; }
+  /* Slot, crucible, and drag-ghost mobile sizing lives in circle.css so it
+     beats the base rules there in cascade order. */
+  .tile.drag-ghost { width: 60px; height: 60px; padding: 4px; }
+  .tile.drag-ghost .icon { width: 30px; height: 30px; }
+  .tile.drag-ghost .name { font-size: 8px; }
 
   /* Library row sizing — tile content size shrinks */
   .lib-tile { min-height: 70px; }
