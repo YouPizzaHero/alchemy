@@ -10,8 +10,6 @@
 
   let activeOverlay = null;
 
-  function init() {}  // no-op — entry points are explicit
-
   function hasSeen(key) {
     try { return localStorage.getItem(key) === '1'; } catch (e) { return false; }
   }
@@ -150,5 +148,5 @@
     card.querySelector('.tutorial-skip').addEventListener('click', onSkip);
   }
 
-  global.Tutorial = { init, maybeStartFirstRun, onAdeptUnlocked };
+  global.Tutorial = { maybeStartFirstRun, onAdeptUnlocked };
 })(window);

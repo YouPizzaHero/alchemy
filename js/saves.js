@@ -35,13 +35,15 @@
   }
 
   // --- Current-state capture / apply ----------------------------------------
+  // Circle slot state isn't persisted: it's transient by design (a brew
+  // either resolves or the player clears it). Only the discovered set
+  // travels between sessions.
   function captureCurrent(name) {
     return {
       version: SCHEMA_VERSION,
       name: (name || '').trim() || defaultName(),
       savedAt: new Date().toISOString(),
       discovered: Array.from(State.state.discovered),
-      workspace: Workspace.serialize(),
     };
   }
 
@@ -54,7 +56,6 @@
   function applySave(data) {
     if (!data) return false;
     State.loadDiscovered(data.discovered || []);
-    Workspace.deserialize(data.workspace || []);
     return true;
   }
 
@@ -77,13 +78,16 @@
       }
       const action = t.dataset.action;
       if (!action) return;
+
+      if (action === 'export') { onExport(); return; }
+      if (action === 'import') { onImport(); return; }
+
       const slot = Number(t.dataset.slot);
+      if (!Number.isInteger(slot) || slot < 1 || slot > SLOT_COUNT) return;
 
       if (action === 'save')   onSave(slot);
       if (action === 'load')   onLoad(slot);
       if (action === 'delete') onDelete(slot);
-      if (action === 'export') onExport();
-      if (action === 'import') onImport();
     });
 
     document.addEventListener('keydown', (e) => {
@@ -233,12 +237,28 @@
     }
   }
 
+  // Hard caps so a pasted blob can't freeze the tab in JSON.parse +
+  // localStorage.setItem before the player notices their mistake.
+  const MAX_IMPORT_CHARS = 200000;     // ~200KB of JSON is plenty for 190 ids
+  const MAX_DISCOVERED   = 5000;
+
   function onImport() {
     const text = window.prompt('Paste a save code:');
     if (!text) return;
     try {
-      const data = JSON.parse(text.trim());
+      const trimmed = text.trim();
+      if (trimmed.length > MAX_IMPORT_CHARS) throw new Error('too large');
+      const data = JSON.parse(trimmed);
       if (!data || !Array.isArray(data.discovered)) throw new Error('bad shape');
+      if (data.discovered.length > MAX_DISCOVERED) throw new Error('too many ids');
+      // Every entry must be a string id we recognise. Unknown ids are
+      // dropped silently in loadDiscovered, but we still bound the array.
+      for (const id of data.discovered) {
+        if (typeof id !== 'string' || id.length > 64) throw new Error('bad id');
+      }
+      if (data.name != null && (typeof data.name !== 'string' || data.name.length > 200)) {
+        throw new Error('bad name');
+      }
       if (!window.confirm('Replace your current run with imported save?')) return;
       applySave(data);
       flash('Save imported.', 'ok');

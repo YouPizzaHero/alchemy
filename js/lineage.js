@@ -138,11 +138,26 @@
     if (!known) {
       return '<span class="lineage-chip lineage-chip-unknown" title="Undiscovered">— ? —</span>';
     }
+    // Tint values are concatenated into a CSS attribute, so harden them
+    // against breakout. Element ids are slug-shaped today, but escape too
+    // in case a future data source ships dirtier ids.
     const cls = 'lineage-chip icon-' + el.category + (isFocus ? ' lineage-chip-focus' : '');
-    return '<button class="' + cls + '" data-lineage-id="' + id + '" style="--tint:' + el.tint + '">' +
-             '<span class="lineage-chip-dot" style="background:' + el.tint + '"></span>' +
+    const safeTint = sanitizeColor(el.tint);
+    return '<button class="' + cls + '" data-lineage-id="' + escapeHtml(id) + '" style="--tint:' + safeTint + '">' +
+             '<span class="lineage-chip-dot" style="background:' + safeTint + '"></span>' +
              '<span class="lineage-chip-name">' + escapeHtml(el.name) + '</span>' +
            '</button>';
+  }
+
+  // Allow only the simple color shapes our data ships (hex, named colors,
+  // rgb/rgba/hsl/hsla functions). Reject anything that could carry a
+  // closing quote, semicolon, or url(). Falls back to a neutral grey.
+  function sanitizeColor(s) {
+    s = String(s || '').trim();
+    if (/^#[0-9a-fA-F]{3,8}$/.test(s)) return s;
+    if (/^[a-zA-Z]+$/.test(s)) return s;
+    if (/^(rgb|rgba|hsl|hsla)\(\s*[0-9.,%\s\/]+\s*\)$/.test(s)) return s;
+    return '#888';
   }
 
   function escapeHtml(s) {

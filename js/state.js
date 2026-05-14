@@ -26,12 +26,6 @@
     return true;
   }
 
-  function discoverSilent(id) {
-    if (!state.byId.has(id)) return false;
-    state.discovered.add(id);
-    return true;
-  }
-
   function isDiscovered(id) { return state.discovered.has(id); }
 
   function resetProgress() {
@@ -73,7 +67,7 @@
   global.State = {
     state,
     ingestElements,
-    discover, discoverSilent, isDiscovered,
+    discover, isDiscovered,
     resetProgress, loadDiscovered, hydrate, onChange,
   };
 })(window);

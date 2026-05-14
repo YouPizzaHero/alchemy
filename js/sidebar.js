@@ -7,6 +7,11 @@
   let searchQuery = '';
   let filtersCollapsed = false;
 
+  // Mounted tile cache so a discovery doesn't have to rebuild the whole
+  // library: we only insert the new tile and re-sort if needed.
+  const tileNodes = new Map();   // elementId -> tile node
+  let lastRenderKey = '';        // detects when a full rebuild is needed
+
   const CATEGORIES = [
     { id: 'all',       label: 'All' },
     { id: 'liquid',    label: 'Liquid' },
@@ -36,7 +41,7 @@
 
     searchEl.addEventListener('input', () => {
       searchQuery = searchEl.value.trim().toLowerCase();
-      render();
+      renderFull();
     });
 
     toggleBtn.addEventListener('click', () => {
@@ -91,7 +96,7 @@
         activeCategory = cat.id;
         for (const t of tabsEl.querySelectorAll('.cat-tab')) t.classList.toggle('active', t.dataset.cat === cat.id);
         updateFilterToggleLabel();
-        render();
+        renderFull();
       });
       tabsEl.appendChild(b);
     }
@@ -121,14 +126,52 @@
     }
   }
 
+  // Two render paths:
+  //   render()      — called on every State change (discovery). Tries to
+  //                   insert just the new tile(s); falls back to a full
+  //                   rebuild if filters/search hide the active view.
+  //   renderFull()  — full rebuild for filter/search/tab changes.
   function render() {
+    const visible = filterElements();
+    const key = activeCategory + '|' + searchQuery;
+    if (key !== lastRenderKey) { renderFull(); return; }
+
+    // Discover the new elements (visible to current filter) that aren't yet
+    // in the DOM and splice them in in sort order.
+    const present = new Set(tileNodes.keys());
+    const needed = visible.filter(el => !present.has(el.id));
+    if (needed.length === 0) {
+      // Nothing new visible — but the player may have just reset (set
+      // shrunk). Drop stale nodes and if the list is now empty, fall
+      // through to renderFull so the empty-state can paint.
+      pruneStaleTiles(visible);
+      if (tileNodes.size === 0) { renderFull(); return; }
+      updateTabCounts();
+      return;
+    }
+    pruneStaleTiles(visible);
+    // Empty state may be present from a previous render; drop it before
+    // inserting tiles.
+    const empty = listEl.querySelector('.empty-state');
+    if (empty) empty.remove();
+    // Insert each new tile at its correct sorted slot.
+    visible.sort((a, b) => a.name.localeCompare(b.name));
+    for (const el of needed) {
+      const node = buildLibTile(el);
+      tileNodes.set(el.id, node);
+      const idx = visible.findIndex(v => v.id === el.id);
+      const next = visible[idx + 1];
+      const ref = next ? tileNodes.get(next.id) : null;
+      listEl.insertBefore(node, ref || null);
+    }
+    updateTabCounts();
+  }
+
+  function renderFull() {
     listEl.innerHTML = '';
-    const els = State.state.elements.filter(el => {
-      if (!State.isDiscovered(el.id)) return false;
-      if (activeCategory !== 'all' && el.category !== activeCategory) return false;
-      if (searchQuery && !el.name.toLowerCase().includes(searchQuery)) return false;
-      return true;
-    });
+    tileNodes.clear();
+    const els = filterElements();
+    lastRenderKey = activeCategory + '|' + searchQuery;
 
     if (els.length === 0) {
       const empty = document.createElement('div');
@@ -139,10 +182,32 @@
       listEl.appendChild(empty);
     } else {
       els.sort((a, b) => a.name.localeCompare(b.name));
-      for (const el of els) listEl.appendChild(buildLibTile(el));
+      for (const el of els) {
+        const node = buildLibTile(el);
+        tileNodes.set(el.id, node);
+        listEl.appendChild(node);
+      }
     }
-
     updateTabCounts();
+  }
+
+  function filterElements() {
+    return State.state.elements.filter(el => {
+      if (!State.isDiscovered(el.id)) return false;
+      if (activeCategory !== 'all' && el.category !== activeCategory) return false;
+      if (searchQuery && !el.name.toLowerCase().includes(searchQuery)) return false;
+      return true;
+    });
+  }
+
+  function pruneStaleTiles(visible) {
+    const visibleIds = new Set(visible.map(e => e.id));
+    for (const [id, node] of [...tileNodes.entries()]) {
+      if (!visibleIds.has(id)) {
+        node.remove();
+        tileNodes.delete(id);
+      }
+    }
   }
 
   function buildLibTile(el) {

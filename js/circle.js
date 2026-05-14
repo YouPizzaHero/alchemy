@@ -9,6 +9,38 @@
 
   const MAX_SLOTS = 5;
 
+  // Geometry / timing constants. Pulled out of inline literals so the
+  // cinematic beats and slot positioning can be tuned in one place.
+  const GEOM = {
+    slotRadiusPct:  36,    // distance from board centre to a slot (% of min dim)
+    crucibleGap:    12,    // pixels between crucible rim and arc start
+    sigilInnerR:    75,    // tight inner ring around the crucible
+    sigilMidRatio: 0.62,   // mid-ring radius as a fraction of avg slot radius
+    sigilOuterPad:   6,    // pixels added to the outer ring beyond avg radius
+  };
+
+  const TIMING = {
+    fillBrewDelayMs:     280,
+    channelStaggerMs:     90,
+    channelBaseMs:      1100,
+    successHoldMs:      3800,
+    failureHoldMs:      1800,
+    sigilFlashMs:       1500,
+    burstLifeMs:        1800,
+    shockLifeBaseMs:    1600,
+    shockStaggerMs:      200,
+    sparkLifeMs:        1000,
+    smokeLifeMs:        2500,
+    emberLifeMs:        1200,
+    boardJoltMs:         450,
+    rankUpDeferMs:      1100,
+    unlockAutoDismissMs:4200,
+    unlockPreviewStepMs: 250,
+    unlockPreviewLeadMs: 700,
+    fadeOutMs:           600,
+    resultRevealMs:      600,
+  };
+
   // Slot-count thresholds tied to the rank progression.
   //   2 slots: Initiate / Apprentice (0-15% discovered)
   //   3 slots: Adept / Scholar       (15-50%)
@@ -30,6 +62,27 @@
   let slots = [];   // { node, x, y, elementId|null }
   let combining = false;
   let revealTimer = null;
+  // Pending timers/nodes spawned by a brew cinematic. If finishCombination
+  // runs early (e.g. via reset), we cancel every pending timeout and remove
+  // every orphaned DOM node so nothing leaks past the cleanup.
+  const pendingTimers = [];
+  const pendingNodes  = [];
+  function laterClean(fn, ms) {
+    const id = setTimeout(() => {
+      const i = pendingTimers.indexOf(id);
+      if (i >= 0) pendingTimers.splice(i, 1);
+      fn();
+    }, ms);
+    pendingTimers.push(id);
+    return id;
+  }
+  function trackNode(node) { pendingNodes.push(node); return node; }
+  function flushPending() {
+    for (const id of pendingTimers) clearTimeout(id);
+    pendingTimers.length = 0;
+    for (const node of pendingNodes) { if (node.parentNode) node.remove(); }
+    pendingNodes.length = 0;
+  }
 
   function init() {
     boardEl     = document.getElementById('circle-board');
@@ -67,7 +120,7 @@
     // i=0 sits at the top; rest distribute clockwise.
     const angle = -Math.PI / 2 + (i / count) * Math.PI * 2;
     // For 2 slots, swap to a top/bottom vertical axis (already true at -π/2 + 0 and -π/2 + π).
-    const radius = 36;  // % of the smaller dimension
+    const radius = GEOM.slotRadiusPct;
     return {
       xPct: 50 + Math.cos(angle) * radius,
       yPct: 50 + Math.sin(angle) * radius,
@@ -132,7 +185,7 @@
     // crucible still gets arcs that sit just outside its rim.
     const crucibleRect = crucibleEl.getBoundingClientRect();
     const crucibleR = crucibleRect.width / 2;
-    const arcR = crucibleR + 12;
+    const arcR = crucibleR + GEOM.crucibleGap;
 
     // Resolve each slot's centre in board-local pixel coordinates.
     const slotCenters = slots.map(s => {
@@ -200,11 +253,11 @@
     for (const s of slotCenters) avgR += Math.hypot(s.x - cx, s.y - cy);
     avgR /= Math.max(1, slotCenters.length);
     const outerR = avgR;
-    const midR   = avgR * 0.62;     // mid ring (often used in alchemical figures)
-    const innerR = 75;              // tight inner ring around crucible
+    const midR   = avgR * GEOM.sigilMidRatio;   // mid ring (often used in alchemical figures)
+    const innerR = GEOM.sigilInnerR;            // tight inner ring around crucible
 
     // Common 'outer boundary' ring — every sigil has it.
-    const outerRing = el('circle', { cx, cy, r: outerR + 6, class: 'sigil-ring sigil-outer' });
+    const outerRing = el('circle', { cx, cy, r: outerR + GEOM.sigilOuterPad, class: 'sigil-ring sigil-outer' });
     sigilEl.appendChild(outerRing);
 
     if (slotCount === 2)      buildVesicaPiscis(cx, cy, outerR, slotCenters, el);
@@ -279,7 +332,7 @@
   }
 
   // --- Public API -----------------------------------------------------------
-  function isSlotAtPoint(clientX, clientY) {
+  function findSlotAtPoint(clientX, clientY) {
     // Returns the slot index whose center is closest to the point, if within range.
     let best = -1;
     let bestDist = Infinity;
@@ -297,7 +350,7 @@
   }
 
   function previewSlotAt(clientX, clientY) {
-    const idx = isSlotAtPoint(clientX, clientY);
+    const idx = findSlotAtPoint(clientX, clientY);
     for (let i = 0; i < slots.length; i++) {
       slots[i].node.classList.toggle('drag-over', i === idx);
     }
@@ -310,7 +363,7 @@
 
   function tryFillFromDrop(clientX, clientY, elementId) {
     if (combining) return false;
-    const idx = isSlotAtPoint(clientX, clientY);
+    const idx = findSlotAtPoint(clientX, clientY);
     if (idx < 0) return false;
     if (slots[idx].elementId) return false;  // occupied
     fillSlot(idx, elementId);
@@ -324,9 +377,12 @@
     s.elementId = elementId;
     s.node.classList.remove('empty');
     s.node.classList.add('filled');
-    // Restart the fill-pulse animation by reflow
+    // Restart the fill-pulse animation: clearing + reading offsetHeight
+    // forces a synchronous layout flush so the browser sees the animation
+    // as "removed" before we re-add it on the next line. Don't move this
+    // into a loop — it's a one-shot per slot fill.
     s.node.style.animation = 'none';
-    s.node.offsetHeight;
+    s.node.offsetHeight;  /* force reflow */
     s.node.style.animation = '';
     s.content.innerHTML = '';
     const icon = Icons.buildIcon(el);
@@ -341,7 +397,7 @@
     if (window.Sound) Sound.slotFill();
     if (allFilled()) {
       // Brief delay so the player sees their last drop register.
-      setTimeout(brew, 280);
+      setTimeout(brew, TIMING.fillBrewDelayMs);
     }
   }
 
@@ -389,12 +445,12 @@
       return slots[idx] && slots[idx].elementId;
     });
     for (let i = 0; i < filledPaths.length; i++) {
-      setTimeout(() => filledPaths[i].classList.add('ignited'), i * 90);
+      laterClean(() => filledPaths[i].classList.add('ignited'), i * TIMING.channelStaggerMs);
     }
 
     // 2. After channels finish racing around the crucible, resolve and reveal.
-    const channelMs = 1100 + Math.max(0, filledPaths.length - 1) * 90;
-    setTimeout(() => resolveCombination(), channelMs);
+    const channelMs = TIMING.channelBaseMs + Math.max(0, filledPaths.length - 1) * TIMING.channelStaggerMs;
+    laterClean(() => resolveCombination(), channelMs);
   }
 
   function resolveCombination() {
@@ -442,7 +498,7 @@
     // the whole inscribed figure pulsing in unison.
     if (sigilEl) {
       sigilEl.classList.add('flash');
-      setTimeout(() => sigilEl.classList.remove('flash'), 1500);
+      laterClean(() => sigilEl.classList.remove('flash'), TIMING.sigilFlashMs);
     }
 
     // CINEMATIC BEAT 2: pillar beams fire back out from the crucible toward
@@ -473,7 +529,8 @@
       burst.appendChild(beam);
     }
     sparksEl.appendChild(burst);
-    setTimeout(() => burst.remove(), 1800);
+    trackNode(burst);
+    laterClean(() => burst.remove(), TIMING.burstLifeMs);
 
     // CINEMATIC BEAT 3: radial shockwave rings expanding outward.
     for (let i = 0; i < 2; i++) {
@@ -481,9 +538,10 @@
       ring.className = 'success-shockwave';
       ring.style.left = cx + 'px';
       ring.style.top  = cy + 'px';
-      ring.style.animationDelay = (i * 200) + 'ms';
+      ring.style.animationDelay = (i * TIMING.shockStaggerMs) + 'ms';
       sparksEl.appendChild(ring);
-      setTimeout(() => ring.remove(), 1600 + i * 200);
+      trackNode(ring);
+      laterClean(() => ring.remove(), TIMING.shockLifeBaseMs + i * TIMING.shockStaggerMs);
     }
 
     // Sparks burst from the crucible (existing beat).
@@ -497,7 +555,8 @@
       s.style.setProperty('--dx', (Math.cos(angle) * dist) + 'px');
       s.style.setProperty('--dy', (Math.sin(angle) * dist) + 'px');
       sparksEl.appendChild(s);
-      setTimeout(() => s.remove(), 1000);
+      trackNode(s);
+      laterClean(() => s.remove(), TIMING.sparkLifeMs);
     }
 
     // Result rises from the crucible.
@@ -509,7 +568,7 @@
     resultEl.appendChild(icon);
     resultEl.appendChild(name);
     resultEl.classList.remove('hidden', 'fading');
-    void resultEl.offsetWidth;
+    void resultEl.offsetWidth;  /* force reflow so the rising animation restarts */
     resultEl.classList.add('rising');
 
     // Burn the true name across the top of the board.
@@ -522,7 +581,7 @@
 
     // Cleanup after the show.
     clearTimeout(revealTimer);
-    revealTimer = setTimeout(finishCombination, 3800);
+    revealTimer = laterClean(finishCombination, TIMING.successHoldMs);
   }
 
   function onFailure() {
@@ -548,7 +607,8 @@
       s.style.animationDuration = (1.4 + Math.random() * 0.6).toFixed(2) + 's';
       s.style.animationDelay = (Math.random() * 0.18).toFixed(2) + 's';
       sparksEl.appendChild(s);
-      setTimeout(() => s.remove(), 2500);
+      trackNode(s);
+      laterClean(() => s.remove(), TIMING.smokeLifeMs);
     }
 
     // 2. Dark embers — small grey-black flecks scattering outward briefly.
@@ -562,7 +622,8 @@
       e.style.setProperty('--dx', (Math.cos(angle) * dist) + 'px');
       e.style.setProperty('--dy', (Math.sin(angle) * dist) + 'px');
       sparksEl.appendChild(e);
-      setTimeout(() => e.remove(), 1200);
+      trackNode(e);
+      laterClean(() => e.remove(), TIMING.emberLifeMs);
     }
 
     // 3. Shake the filled slots like a flask that just slammed.
@@ -570,12 +631,16 @@
 
     // 4. Slightly stutter the whole board for a beat.
     boardEl.classList.add('fail-jolt');
-    setTimeout(() => boardEl.classList.remove('fail-jolt'), 450);
+    laterClean(() => boardEl.classList.remove('fail-jolt'), TIMING.boardJoltMs);
 
-    setTimeout(finishCombination, 1800);
+    laterClean(finishCombination, TIMING.failureHoldMs);
   }
 
   function finishCombination() {
+    // Flush any cinematic timers/nodes still in flight. Without this an
+    // external reset (e.g. the player hits Clear or loads a save mid-show)
+    // would leave the next 1-2s of timeouts ticking at orphan DOM nodes.
+    flushPending();
     // Clear board state.
     boardEl.classList.remove('brewing', 'fizzling', 'fail-jolt');
     for (const path of channelsEl.querySelectorAll('path.ignited')) path.classList.remove('ignited');
@@ -584,7 +649,7 @@
     setTimeout(() => {
       resultEl.classList.add('hidden');
       resultEl.classList.remove('rising', 'fading');
-    }, 600);
+    }, TIMING.fadeOutMs);
     clearAllSlots();
     combining = false;
     updateCrucibleReady();
@@ -625,7 +690,7 @@
     if (growing) {
       // Defer the slot expansion so the rank-up banner gets a moment to play,
       // then run the cutscene which itself triggers rebuildSlots(target).
-      setTimeout(() => playSlotUnlockCutscene(slotCount, target), 1100);
+      setTimeout(() => playSlotUnlockCutscene(slotCount, target), TIMING.rankUpDeferMs);
     } else {
       rebuildSlots(target);
     }
@@ -653,7 +718,7 @@
         setTimeout(() => {
           previewSlots[i].classList.add('appear');
           if (isNew) previewSlots[i].classList.add('new');
-        }, 700 + i * 250);
+        }, TIMING.unlockPreviewLeadMs + i * TIMING.unlockPreviewStepMs);
       }
     });
 
@@ -667,7 +732,7 @@
         const liveSlots = document.querySelectorAll('#slots .slot');
         for (let i = from; i < liveSlots.length; i++) liveSlots[i].classList.add('appearing');
       });
-      setTimeout(() => overlay.remove(), 600);
+      setTimeout(() => overlay.remove(), TIMING.fadeOutMs);
       // The first time the player reaches Adept (3 slots), introduce the
       // tap-to-brew mechanic with a short lesson.
       if (to === 3 && window.Tutorial && Tutorial.onAdeptUnlocked) {
@@ -676,7 +741,7 @@
     }
     overlay.addEventListener('click', dismiss);
     // Auto-dismiss after 4 seconds so the player doesn't have to interact.
-    setTimeout(dismiss, 4200);
+    setTimeout(dismiss, TIMING.unlockAutoDismissMs);
   }
 
   function buildPreviewMarkup(count) {

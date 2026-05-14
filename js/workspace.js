@@ -26,10 +26,6 @@
     });
   }
 
-  // --- Save/load surface (kept stable for the saves system) -----------------
-  function serialize() { return []; }   // slot state isn't persisted yet
-  function deserialize() { /* no-op for circle-mode */ }
-
   // --- Reset confirmation modal ---------------------------------------------
   function openResetModal() {
     const modal = document.getElementById('reset-modal');
@@ -217,5 +213,5 @@
     document.addEventListener('pointercancel', onEnd);
   }
 
-  global.Workspace = { init, serialize, deserialize, attachLibraryDragSource };
+  global.Workspace = { init, attachLibraryDragSource };
 })(window);

@@ -56,10 +56,22 @@
     if (window.Sound) Sound.rankUp();
     const banner = document.createElement('div');
     banner.className = 'rank-up-banner';
-    banner.innerHTML =
-      '<div class="rank-up-label">Rank Achieved</div>' +
-      '<div class="rank-up-title">' + rank.title + '</div>' +
-      '<div class="rank-up-flavor">' + (rank.flavor || '') + '</div>';
+    // role=status + aria-live=polite makes screen readers announce the new
+    // rank without the user having to navigate to the banner.
+    banner.setAttribute('role', 'status');
+    banner.setAttribute('aria-live', 'polite');
+    const label = document.createElement('div');
+    label.className = 'rank-up-label';
+    label.textContent = 'Rank Achieved';
+    const title = document.createElement('div');
+    title.className = 'rank-up-title';
+    title.textContent = rank.title;
+    const flavor = document.createElement('div');
+    flavor.className = 'rank-up-flavor';
+    flavor.textContent = rank.flavor || '';
+    banner.appendChild(label);
+    banner.appendChild(title);
+    banner.appendChild(flavor);
     document.body.appendChild(banner);
     setTimeout(() => banner.remove(), 4200);
   }

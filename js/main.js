@@ -45,20 +45,22 @@
     const modal = document.getElementById('legacy-saves-modal');
     if (!modal) return;
     modal.classList.remove('hidden');
+    // Both dismiss paths (click + key) must remove BOTH listeners; previously
+    // the key handler self-removed independently, which let one listener
+    // outlive its modal forever when the player used the other path first.
     function dismiss() {
       modal.classList.add('hidden');
       modal.removeEventListener('click', onClick);
+      document.removeEventListener('keydown', onKey);
     }
     function onClick(e) {
       if (e.target.dataset.close !== undefined || e.target.classList.contains('legacy-ok')) dismiss();
     }
+    function onKey(e) {
+      if (e.key === 'Escape' || e.key === 'Enter') dismiss();
+    }
     modal.addEventListener('click', onClick);
-    document.addEventListener('keydown', function onKey(e) {
-      if (e.key === 'Escape' || e.key === 'Enter') {
-        document.removeEventListener('keydown', onKey);
-        dismiss();
-      }
-    });
+    document.addEventListener('keydown', onKey);
   }
 
   try {
@@ -92,17 +94,20 @@
     document.getElementById('loading').classList.add('hidden');
 
     // First-run tutorial: start once the splash dismisses and (if it
-    // fired) the legacy-saves modal is closed.
+    // fired) the legacy-saves modal is closed. The listener self-removes
+    // on the *first* click anywhere on the modal — not just the OK paths —
+    // so it can't outlive the modal even if the player clicks the backdrop
+    // and then closes via the keyboard.
     setTimeout(() => {
       const legacyModal = document.getElementById('legacy-saves-modal');
       const legacyOpen = legacyModal && !legacyModal.classList.contains('hidden');
       if (legacyOpen) {
-        legacyModal.addEventListener('click', function once(e) {
-          if (e.target.dataset.close !== undefined || e.target.classList.contains('legacy-ok')) {
-            legacyModal.removeEventListener('click', once);
-            setTimeout(() => Tutorial.maybeStartFirstRun && Tutorial.maybeStartFirstRun(), 400);
-          }
-        });
+        const once = (e) => {
+          if (e.target.dataset.close === undefined && !e.target.classList.contains('legacy-ok')) return;
+          legacyModal.removeEventListener('click', once);
+          setTimeout(() => Tutorial.maybeStartFirstRun && Tutorial.maybeStartFirstRun(), 400);
+        };
+        legacyModal.addEventListener('click', once);
       } else {
         Tutorial.maybeStartFirstRun && Tutorial.maybeStartFirstRun();
       }
@@ -142,9 +147,9 @@
 
   // JS-driven rotate-prompt detection. iOS Safari sometimes doesn't
   // re-evaluate CSS orientation media queries after a real rotation,
-  // so the prompt could get stuck. Instead, we check actual viewport
-  // dimensions on every event that might signal a layout change, plus
-  // a low-frequency safety poll.
+  // so we check actual viewport dimensions on every event that might
+  // signal a layout change. matchMedia('(orientation: portrait)')
+  // covers what the OS-level rotation event misses.
   function initRotatePrompt() {
     function update() {
       // Treat 'phone-sized + portrait' as 'show the prompt'. The width
@@ -159,10 +164,13 @@
     window.addEventListener('orientationchange', update);
     window.addEventListener('focus',             update);
     document.addEventListener('visibilitychange', update);
-    // Safety net for iOS Safari rotation events that occasionally don't
-    // fire the standard events — re-check once a second while the page
-    // is visible. Cheap.
-    setInterval(() => { if (!document.hidden) update(); }, 1000);
+    // matchMedia fires on the OS-level orientation change even when iOS
+    // Safari delays its resize/orientationchange events.
+    try {
+      const mq = window.matchMedia('(orientation: portrait)');
+      if (mq && mq.addEventListener) mq.addEventListener('change', update);
+      else if (mq && mq.addListener) mq.addListener(update);  // older Safari
+    } catch (e) { /* ignore — matchMedia missing */ }
   }
 
   function initAboutModal() {

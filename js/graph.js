@@ -112,10 +112,19 @@
         const node = document.createElement('button');
         node.className = 'graph-node icon-' + el.category;
         node.dataset.graphId = el.id;
+        // Use setProperty (not innerHTML interpolation) so a future data
+        // source containing CSS-breaking characters in `tint` can't escape
+        // the style attribute.
         node.style.setProperty('--tint', el.tint);
         node.title = el.name;
-        node.innerHTML = '<span class="graph-node-dot" style="background:' + el.tint + '"></span>' +
-                         '<span class="graph-node-name">' + escapeHtml(el.name) + '</span>';
+        const dot = document.createElement('span');
+        dot.className = 'graph-node-dot';
+        dot.style.background = el.tint;
+        const name = document.createElement('span');
+        name.className = 'graph-node-name';
+        name.textContent = el.name;
+        node.appendChild(dot);
+        node.appendChild(name);
         items.appendChild(node);
       }
       row.appendChild(items);
