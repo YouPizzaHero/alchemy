@@ -53,6 +53,7 @@
   }
 
   function showRankUpBanner(rank) {
+    if (window.Sound) Sound.rankUp();
     const banner = document.createElement('div');
     banner.className = 'rank-up-banner';
     banner.innerHTML =

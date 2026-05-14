@@ -54,6 +54,13 @@
 
     document.body.classList.toggle('layout-flipped', position === 'left');
 
+    // Sound mute state (driven by Sound module, but reflected here).
+    const soundOn = !(window.Sound && Sound.isMuted && Sound.isMuted());
+    for (const b of document.querySelectorAll('#sound-options .settings-opt')) {
+      const wantOn = b.dataset.sound === 'on';
+      b.classList.toggle('active', wantOn === soundOn);
+    }
+
     // Update active state on settings buttons (if modal exists).
     for (const b of document.querySelectorAll('#layout-options .settings-opt')) {
       b.classList.toggle('active', b.dataset.layout === layout);
@@ -108,6 +115,14 @@
       if (opt.dataset.layout) setLayout(opt.dataset.layout);
       if (opt.dataset.tilesize) setTileSize(opt.dataset.tilesize);
       if (opt.dataset.position) setPosition(opt.dataset.position);
+      if (opt.dataset.sound) {
+        const wantOn = opt.dataset.sound === 'on';
+        if (window.Sound) {
+          Sound.setMuted(!wantOn);
+          if (wantOn) Sound.ui();   // give immediate audible feedback
+        }
+        apply();
+      }
     });
 
     document.addEventListener('keydown', (e) => {

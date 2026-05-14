@@ -84,6 +84,7 @@
     if (typeof Lineage !== 'undefined') Lineage.init();
     if (typeof Graph   !== 'undefined') Graph.init();
     if (typeof Seasons !== 'undefined') Seasons.init();
+    if (typeof Sound   !== 'undefined') Sound.init();
     initAboutModal();
     initBoardOffset();
 

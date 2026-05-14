@@ -54,7 +54,10 @@
       crucibleEl.addEventListener('click', () => {
         if (combining) return;
         const filled = slots.filter(s => s.elementId).length;
-        if (filled >= 2) brew();
+        if (filled >= 2) {
+          if (window.Sound) Sound.tap();
+          brew();
+        }
       });
     }
   }
@@ -335,6 +338,7 @@
     s.content.appendChild(name);
     fadeHint();
     updateCrucibleReady();
+    if (window.Sound) Sound.slotFill();
     if (allFilled()) {
       // Brief delay so the player sees their last drop register.
       setTimeout(brew, 280);
@@ -376,6 +380,7 @@
     combining = true;
     boardEl.classList.add('brewing');
     if (crucibleEl) crucibleEl.classList.remove('ready');
+    if (window.Sound) Sound.channelIgnite();
 
     // 1. Ignite only the channels whose slot is filled. Empty slots stay dark.
     const allPaths = [...channelsEl.querySelectorAll('path')];
@@ -513,6 +518,7 @@
 
     // Mark discovered (fires sidebar + progress listeners).
     State.discover(resultId);
+    if (window.Sound) Sound.brewSuccess();
 
     // Cleanup after the show.
     clearTimeout(revealTimer);
@@ -521,6 +527,7 @@
 
   function onFailure() {
     boardEl.classList.add('fizzling');
+    if (window.Sound) Sound.brewFail();
     const cRect = crucibleEl.getBoundingClientRect();
     const boardRect = boardEl.getBoundingClientRect();
     const cx = cRect.left + cRect.width / 2 - boardRect.left;
