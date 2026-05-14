@@ -125,9 +125,11 @@
 
     const cx = boardRect.width / 2;
     const cy = boardRect.height / 2;
-    // Crucible div is 110px square with a wider glow; arc just outside its visual rim.
-    const crucibleR = 55;
-    const arcR = crucibleR + 14;
+    // Sample the crucible's actual rendered radius so mobile-compact's smaller
+    // crucible still gets arcs that sit just outside its rim.
+    const crucibleRect = crucibleEl.getBoundingClientRect();
+    const crucibleR = crucibleRect.width / 2;
+    const arcR = crucibleR + 12;
 
     // Resolve each slot's centre in board-local pixel coordinates.
     const slotCenters = slots.map(s => {
