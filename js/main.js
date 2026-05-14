@@ -87,6 +87,7 @@
     if (typeof Sound   !== 'undefined') Sound.init();
     initAboutModal();
     initBoardOffset();
+    initRotateOverride();
 
     document.getElementById('loading').classList.add('hidden');
 
@@ -136,6 +137,21 @@
     // Library width can change via Settings — recompute after a beat.
     document.getElementById('btn-settings')?.addEventListener('click', () => {
       setTimeout(update, 400);
+    });
+  }
+
+  // Lets the player bypass the 'Rotate your device' prompt — used when
+  // iOS rotation lock is on so the device viewport stays portrait even
+  // after physical rotation. Once overridden, the board-offset is
+  // recomputed so popups still land where they should.
+  function initRotateOverride() {
+    const btn = document.getElementById('rotate-override');
+    if (!btn) return;
+    btn.addEventListener('click', () => {
+      document.body.classList.add('rotate-override');
+      // Trigger any layout recompute (board-offset, channels) now that
+      // the workspace is visible.
+      window.dispatchEvent(new Event('resize'));
     });
   }
 

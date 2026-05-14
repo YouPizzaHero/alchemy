@@ -752,7 +752,34 @@ button.danger:hover { background: rgba(196,49,74,0.15); }
   55%, 100% { opacity: 0; }
 }
 
+.rotate-tip {
+  margin-top: 14px !important;
+  font-size: 13px !important;
+  color: var(--ink-mute) !important;
+  font-style: italic;
+}
+.rotate-override {
+  margin-top: 14px;
+  padding: 10px 18px;
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  background: transparent;
+  color: var(--gold-bright);
+  border: 1px solid var(--gold);
+  border-radius: 8px;
+  cursor: pointer;
+}
+.rotate-override:hover { background: rgba(216,168,56,0.12); box-shadow: var(--glow); }
+
 @media (orientation: portrait) and (max-width: 900px) {
   #rotate-prompt { display: flex; }
   #topbar, #progress-bar, #stage { visibility: hidden; }
 }
+/* Manual override — if a player's rotation-lock is on, they can play
+   anyway. Wins over the media query above. */
+body.rotate-override #rotate-prompt { display: none !important; }
+body.rotate-override #topbar,
+body.rotate-override #progress-bar,
+body.rotate-override #stage { visibility: visible !important; }
