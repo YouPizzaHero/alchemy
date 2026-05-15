@@ -18,14 +18,15 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=EB+Garamond:ital@0;1&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/splash.css?v=62">
-  <link rel="stylesheet" href="css/main.css?v=62">
-  <link rel="stylesheet" href="css/icons.css?v=62">
-  <link rel="stylesheet" href="css/workspace.css?v=62">
-  <link rel="stylesheet" href="css/circle.css?v=62">
-  <link rel="stylesheet" href="css/themes.css?v=62">
-  <link rel="stylesheet" href="css/seasons.css?v=62">
-  <link rel="stylesheet" href="css/lineage.css?v=62">
+  <link rel="stylesheet" href="css/splash.css?v=64">
+  <link rel="stylesheet" href="css/main.css?v=64">
+  <link rel="stylesheet" href="css/icons.css?v=64">
+  <link rel="stylesheet" href="css/workspace.css?v=64">
+  <link rel="stylesheet" href="css/circle.css?v=64">
+  <link rel="stylesheet" href="css/themes.css?v=64">
+  <link rel="stylesheet" href="css/seasons.css?v=64">
+  <link rel="stylesheet" href="css/lineage.css?v=64">
+  <link rel="stylesheet" href="css/hints.css?v=64">
 </head>
 <body>
   <div id="app">
@@ -40,6 +41,7 @@
         <span id="discovery-count">0 / 0</span>
       </div>
       <div class="actions">
+        <button id="btn-hint" class="ghost" title="Burn the flame for a hint">Hint</button>
         <button id="btn-graph" class="ghost" title="See the Tree of Forging">Tree</button>
         <button id="btn-saves" class="ghost" title="Save / load games">Saves</button>
         <button id="btn-settings" class="ghost" title="UI settings">Settings</button>
@@ -100,6 +102,17 @@
         <h2 id="lineage-title" class="modal-title">Lineage</h2>
         <div class="modal-body lineage-body">
           <div id="lineage-content"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="hint-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="hint-title">
+      <div class="modal-backdrop" data-close></div>
+      <div class="modal-card hint-card">
+        <button class="modal-close" data-close aria-label="Close">✕</button>
+        <h2 id="hint-title" class="modal-title">Whisper from the Crucible</h2>
+        <div class="modal-body">
+          <div id="hint-content"></div>
         </div>
       </div>
     </div>
@@ -288,27 +301,29 @@
 
   </div>
 
-  <script src="js/splash.js?v=62"></script>
-  <script src="data/elements.js?v=62"></script>
-  <script src="data/recipes.js?v=62"></script>
-  <script src="data/multi_recipes.js?v=62"></script>
-  <script src="js/storage.js?v=62"></script>
-  <script src="js/state.js?v=62"></script>
-  <script src="js/recipes.js?v=62"></script>
-  <script src="js/multi_recipes.js?v=62"></script>
-  <script src="js/ranks.js?v=62"></script>
-  <script src="js/icons.js?v=62"></script>
-  <script src="js/progress.js?v=62"></script>
-  <script src="js/saves.js?v=62"></script>
-  <script src="js/tutorial.js?v=62"></script>
-  <script src="js/lineage.js?v=62"></script>
-  <script src="js/graph.js?v=62"></script>
-  <script src="js/seasons.js?v=62"></script>
-  <script src="js/sound.js?v=62"></script>
-  <script src="js/settings.js?v=62"></script>
-  <script src="js/sidebar.js?v=62"></script>
-  <script src="js/circle.js?v=62"></script>
-  <script src="js/workspace.js?v=62"></script>
-  <script src="js/main.js?v=62"></script>
+  <script src="js/splash.js?v=64"></script>
+  <script src="data/elements.js?v=64"></script>
+  <script src="data/recipes.js?v=64"></script>
+  <script src="data/multi_recipes.js?v=64"></script>
+  <script src="js/storage.js?v=64"></script>
+  <script src="js/state.js?v=64"></script>
+  <script src="js/recipes.js?v=64"></script>
+  <script src="js/multi_recipes.js?v=64"></script>
+  <script src="js/ranks.js?v=64"></script>
+  <script src="js/icons.js?v=64"></script>
+  <script src="js/progress.js?v=64"></script>
+  <script src="js/saves.js?v=64"></script>
+  <script src="js/tutorial.js?v=64"></script>
+  <script src="js/lineage.js?v=64"></script>
+  <script src="js/graph.js?v=64"></script>
+  <script src="js/ads.js?v=64"></script>
+  <script src="js/hints.js?v=64"></script>
+  <script src="js/seasons.js?v=64"></script>
+  <script src="js/sound.js?v=64"></script>
+  <script src="js/settings.js?v=64"></script>
+  <script src="js/sidebar.js?v=64"></script>
+  <script src="js/circle.js?v=64"></script>
+  <script src="js/workspace.js?v=64"></script>
+  <script src="js/main.js?v=64"></script>
 </body>
 </html>
