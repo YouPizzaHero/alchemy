@@ -1,8 +1,11 @@
-# Alchemy — The Circle of Binding
+# Athanor: Forge the Unknown
 
 A discovery-based crafting game themed as a dark alchemist's working circle.
 Drag elements into sigil slots, watch burning ley-lines race around the
 crucible, and forge new elements whose true names burn across the board.
+
+The *athanor* is the alchemist's eternal furnace — the slow, patient flame
+from which the Great Work is born.
 
 A Pizza Hero Gaming project.
 
@@ -111,7 +114,8 @@ You can also click any tile in your library to open its lineage directly.
 ## Project layout
 
 ```
-alchemy/
+athanor/   (repo dir; the GitHub repo is still named "alchemy" — testing
+            links stay live, and the repo URL doesn't surface to players)
 ├── index.html
 ├── manifest.json                — PWA manifest, landscape orientation
 ├── assets/icons/icon.svg        — installable app icon (gold alembic)

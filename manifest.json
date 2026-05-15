@@ -1,7 +1,7 @@
 {
-  "name": "Alchemy",
-  "short_name": "Alchemy",
-  "description": "Discover the world from four elements. Drag pairs together to forge new ones. A Pizza Hero Gaming project.",
+  "name": "Athanor: Forge the Unknown",
+  "short_name": "Athanor",
+  "description": "An alchemist's working circle. Drag elements into the sigil slots and forge the unknown. A Pizza Hero Gaming project.",
   "id": "/",
   "start_url": "./",
   "scope": "./",
