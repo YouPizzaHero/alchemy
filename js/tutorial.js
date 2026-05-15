@@ -137,10 +137,19 @@
       card.style.left = cx + 'px';
       card.style.top  = cy + 'px';
     } else {
-      // No target → centre on the board (not the whole viewport, which
-      // would skew toward the library on the side).
-      card.style.left = 'calc(50% + var(--board-offset-x, 0px))';
-      card.style.top  = 'calc(50% + var(--board-offset-y, 0px))';
+      // No target → centre the card. On a desktop layout we anchor to
+      // the board (the library would otherwise skew centring off to the
+      // side), but on small landscape phones the workspace is squeezed
+      // so hard by the library that board-offset would push the card
+      // off the edge entirely. Switch to plain viewport centring then.
+      const compactLandscape = window.innerHeight <= 500 && window.innerWidth > window.innerHeight;
+      if (compactLandscape) {
+        card.style.left = '50%';
+        card.style.top  = '50%';
+      } else {
+        card.style.left = 'calc(50% + var(--board-offset-x, 0px))';
+        card.style.top  = 'calc(50% + var(--board-offset-y, 0px))';
+      }
       card.style.transform = 'translate(-50%, -50%)';
     }
 

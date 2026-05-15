@@ -263,13 +263,30 @@
   opacity: 0.4;
 }
 
-/* Mobile / compact layout: shrink the title block. */
+/* Mobile / compact layout: shrink the title block. Two breakpoints
+   so short screens (landscape phones) and very short screens (older
+   iPhones in landscape: 320px-ish height) both fit. */
 @media (max-height: 600px) {
   .title-glyph { font-size: 56px; }
   .title-name { font-size: 42px; letter-spacing: 0.28em; padding-left: 0.28em; }
   .title-tagline { font-size: 16px; margin-bottom: 18px; }
   .title-welcome { margin-bottom: 20px; }
   .title-enter { padding: 14px 28px; font-size: 13px; }
+}
+/* Very short landscape — iPhone SE / Mini in landscape is ~320px tall.
+   Reduce everything further so the glyph, title, tagline, welcome line,
+   ENTER button, and SETTINGS · ABOUT row all clear the visible area. */
+@media (max-height: 420px) {
+  .title-content { padding: 10px 18px; }
+  .title-glyph   { font-size: 38px; }
+  .title-name    { font-size: 30px; letter-spacing: 0.22em; padding-left: 0.22em; margin: 6px 0 2px; }
+  .title-rule    { font-size: 10px; margin: 0 0 4px; }
+  .title-tagline { font-size: 13px; margin-bottom: 10px; }
+  .title-welcome { margin-bottom: 12px; }
+  .title-welcome-line  { font-size: 14px; }
+  .title-welcome-stats { font-size: 11px; }
+  .title-enter   { padding: 10px 22px; font-size: 11px; }
+  .title-secondary { margin-top: 14px; font-size: 10px; }
 }
 @media (max-width: 480px) {
   .title-name { font-size: 36px; letter-spacing: 0.24em; padding-left: 0.24em; }

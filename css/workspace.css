@@ -477,10 +477,15 @@ body.layout-flipped #workspace { border-right: none; border-left: 1px solid var(
   #sort-bar .sort-label { font-size: 8px; margin-right: 4px; }
   #sort-bar .sort-opt   { font-size: 9px; padding: 3px 7px; min-height: 22px; }
 
-  /* Modal cards usable on tiny landscape screens */
+  /* Modal cards usable on tiny landscape screens.
+     dvh (dynamic viewport height) is the modern unit that excludes the
+     iOS Safari URL bar; vh is the older fallback for browsers without
+     dvh support. Both lines are declared so old browsers ignore dvh
+     and modern browsers take it as the winning later declaration. */
   .modal-card {
     padding: 14px 18px 12px;
     max-height: calc(100vh - 24px);
+    max-height: calc(100dvh - 24px);
   }
   .modal-title { font-size: 16px; margin-bottom: 8px; }
   .modal-body { font-size: 12.5px; line-height: 1.4; }
@@ -488,13 +493,89 @@ body.layout-flipped #workspace { border-right: none; border-left: 1px solid var(
   .modal-body p, .modal-body ul { margin-bottom: 6px; }
   .modal-flavor { font-size: 13px; margin-bottom: 8px !important; }
   /* On short screens the board-offset can push the card a hair off-screen —
-     swap to viewport centering for any tall content modal. */
+     swap to viewport centering for every modal so nothing clips at the edges. */
   #about-modal .modal-card,
   #settings-modal .modal-card,
   #saves-modal .modal-card,
   #reset-modal .modal-card,
-  #legacy-saves-modal .modal-card {
+  #legacy-saves-modal .modal-card,
+  #lineage-modal .modal-card,
+  #graph-modal .modal-card,
+  #hint-modal .modal-card {
     top: 50%;
     left: 50%;
   }
+
+  /* The compact-mobile rules below use parent-id prefixes so they
+     win the cascade against the per-modal CSS files (hints.css,
+     lineage.css, themes.css) that load AFTER workspace.css. */
+
+  /* Hint modal: shrink the recipe-preview chips and pull padding tight. */
+  #hint-modal .hint-card { max-width: calc(100vw - 28px); }
+  #hint-modal .hint-recipe { padding: 14px 8px; gap: 8px; }
+  #hint-modal .hint-chip { font-size: 11px; padding: 6px 10px; }
+  #hint-modal .hint-mystery { font-size: 16px; padding: 4px 10px; }
+  #hint-modal .hint-watch,
+  #hint-modal .hint-retry,
+  #hint-modal .hint-begin {
+    padding: 11px 14px;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+  }
+
+  /* Lineage modal: tighter head + smaller icon so the recipe lists below
+     get more vertical room. */
+  #lineage-modal .lineage-head { gap: 10px; padding-bottom: 10px; margin-bottom: 12px; }
+  #lineage-modal .lineage-icon-wrap { width: 44px; height: 44px; }
+  #lineage-modal .lineage-icon-wrap .icon { width: 36px; height: 36px; }
+  #lineage-modal .lineage-name { font-size: 16px; }
+  #lineage-modal .lineage-section h3 { font-size: 10px; }
+  #lineage-modal .lineage-chip { font-size: 10px; padding: 4px 8px; }
+
+  /* Graph modal: cap the canvas so the close button + title stay onscreen,
+     and let rows scroll inside. dvh fallback pair for iOS Safari. */
+  #graph-modal .graph-card {
+    max-height: calc(100vh - 16px);
+    max-height: calc(100dvh - 16px);
+  }
+  #graph-modal .graph-canvas {
+    max-height: calc(100vh - 90px);
+    max-height: calc(100dvh - 90px);
+  }
+  #graph-modal .graph-tier-label { width: 56px; font-size: 9px; padding-top: 2px; }
+  #graph-modal .graph-node { padding: 3px 7px 3px 4px; }
+  #graph-modal .graph-node-name { font-size: 9px; }
+
+  /* Rank-up banner: trimmed padding + smaller type, plus board-offset
+     centring replaced with viewport centring so the banner doesn't push
+     off the edge of narrow landscape phones. body-class adds enough
+     specificity to win over themes.css. */
+  body .rank-up-banner {
+    top: 50%;
+    left: 50%;
+    padding: 16px 26px;
+    min-width: 220px;
+    max-width: calc(100vw - 32px);
+  }
+  body .rank-up-title  { font-size: 22px; margin-bottom: 4px; }
+  body .rank-up-flavor { font-size: 12.5px; }
+  body .rank-up-label  { font-size: 9px; }
+
+  /* Tutorial card: keep the base 360px max-width (or shrink it on
+     very narrow screens), just trim padding + font sizes for the
+     shorter landscape-phone layout. The 360px cap was correct —
+     don't let the card take half the screen. */
+  body .tutorial-card {
+    max-width: min(360px, calc(100vw - 24px));
+    padding: 12px 14px 10px;
+  }
+  body .tutorial-title { font-size: 14px; }
+  body .tutorial-body  { font-size: 12px; }
+
+  /* Slot-unlock cutscene: trim margins so the preview slots + dismiss
+     hint don't get pushed off a short screen. circle.css loads after
+     workspace.css so body-prefix wins the cascade. */
+  body .suc-subtitle { margin-bottom: 16px; font-size: 13px; }
+  body .suc-preview { gap: 10px; margin-bottom: 14px; }
+  body .suc-slot { width: 44px; height: 44px; }
 }

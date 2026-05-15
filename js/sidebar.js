@@ -69,7 +69,15 @@
         }
       }
     } catch (e) {}
-    try { filtersCollapsed = localStorage.getItem(KEY_COLLAPSE) === '1'; } catch (e) {}
+    // Filters start COLLAPSED by default for new players — the
+    // category strip is a lot to take in and the discovery loop
+    // works fine without it. Players who expand the filters have
+    // their choice remembered. Only an explicit '0' means "I want
+    // them open"; a missing key (new player) means "collapsed".
+    try {
+      const v = localStorage.getItem(KEY_COLLAPSE);
+      filtersCollapsed = (v === null) ? true : (v === '1');
+    } catch (e) { filtersCollapsed = true; }
 
     renderTabs();
     renderSortBar();

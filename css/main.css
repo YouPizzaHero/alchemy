@@ -355,7 +355,11 @@ button.danger:hover { background: rgba(196,49,74,0.15); }
   pointer-events: auto;
   max-width: 520px;
   width: calc(100% - 48px);
+  /* dvh is the modern dynamic viewport that excludes the iOS Safari
+     URL bar; vh is the fallback for older browsers. Declaring both
+     lets the cascade pick whichever the engine supports. */
   max-height: 85vh;
+  max-height: 85dvh;
   overflow-y: auto;
   background: linear-gradient(180deg, var(--bg-mid), var(--bg-deep));
   border: 1px solid var(--gold);
