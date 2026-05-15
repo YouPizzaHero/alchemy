@@ -17,20 +17,23 @@
     #03020a 100%
   );
   color: var(--ink, #fff);
-  opacity: 0;
-  transition: opacity 0.7s ease, transform 0.6s ease;
-  pointer-events: none;
+  /* The screen itself is fully opaque the instant it mounts so the
+     workspace can't bleed through. The fade-in lives on .title-content
+     below instead (background stays solid, only the foreground
+     blooms in). */
+  opacity: 1;
+  pointer-events: auto;
   /* Cover safe-area insets so the dark backdrop reaches the iPhone notch. */
   padding: env(safe-area-inset-top) env(safe-area-inset-right)
            env(safe-area-inset-bottom) env(safe-area-inset-left);
 }
-#title-screen.visible {
-  opacity: 1;
-  pointer-events: auto;
-}
+/* Exit transition — fades the whole thing out when the player taps
+   "Enter the Circle". Slowed for a cinematic dissolve; the JS
+   setTimeout in dismiss() must stay >= this duration. */
 #title-screen.leaving {
   opacity: 0;
   transform: scale(1.04);
+  transition: opacity 1s ease, transform 1s ease;
 }
 #title-screen.hidden { display: none; }
 
@@ -90,7 +93,31 @@
   text-align: center;
   max-width: 560px;
   padding: 28px 32px;
+  /* Starts slightly low + transparent, blooms in once .title-screen
+     gets the .visible class (typically wired to PHG splash's
+     onDismiss so they cross-fade). Background is already opaque so
+     the workspace can't show through during the fade. Slowed to 1.6s
+     for a deliberate, cinematic bloom. */
+  opacity: 0;
+  transform: translateY(14px) scale(0.98);
+  transition: opacity 1.6s ease, transform 1.6s ease;
+  /* Block clicks until the content is actually visible — defensive
+     against a buried button being hit through a still-invisible UI. */
+  pointer-events: none;
 }
+#title-screen.visible .title-content {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+/* Embers + warm glow keep their entrance gentle too — start dim and
+   ramp up. They never let the workspace through (the ::before glow is
+   additive on top of an already-opaque backdrop). */
+.title-bg {
+  opacity: 0.4;
+  transition: opacity 2s ease;
+}
+#title-screen.visible .title-bg { opacity: 1; }
 
 .title-glyph {
   font-size: 80px;

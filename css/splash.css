@@ -21,7 +21,10 @@
   animation: phs-fade-in 0.4s ease-out forwards;
 }
 .phs-splash.phs-out {
-  animation: phs-fade-out 0.55s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+  /* Slowed from 0.55s for a more cinematic cross-fade into the title
+     screen. The JS setTimeout in splash.js (showRewarded -> dismiss)
+     must stay >= this duration so onComplete fires after the fade. */
+  animation: phs-fade-out 1.1s cubic-bezier(0.65, 0, 0.35, 1) forwards;
 }
 .phs-splash.phs-shake {
   animation: phs-fade-in 0.4s ease-out forwards, phs-shake 0.45s ease-out;

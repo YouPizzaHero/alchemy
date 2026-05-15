@@ -38,10 +38,13 @@
       lastTheme = rank.theme;
     }
 
-    // Sync the Circle's slot count with the current rank. The Circle decides
-    // whether this is a change and runs the unlock cutscene itself.
+    // Sync the Circle's slot count with the current rank. On the first
+    // render after hydrate (lastRankTitle === null) the player isn't
+    // progressing — they're resuming a save where their rank already
+    // granted wider slots. Pass that hint so the Circle silently catches
+    // up instead of firing the slot-unlock cutscene on load.
     if (window.Circle && Circle.setSlotCountForRank) {
-      Circle.setSlotCountForRank(rank.theme);
+      Circle.setSlotCountForRank(rank.theme, lastRankTitle === null);
     }
 
     // Show a rank-up banner the first time a new rank is reached

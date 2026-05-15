@@ -38,6 +38,8 @@
 
     setTimeout(() => splash.classList.add('phs-shake'), 1050);
 
+    const onDismiss = opts.onDismiss || function () {};
+
     let dismissed = false;
     function dismiss() {
       if (dismissed) return;
@@ -45,10 +47,14 @@
       window.removeEventListener('keydown', onKey);
       splash.removeEventListener('click', onClick);
       splash.classList.add('phs-out');
+      // Fire onDismiss the instant the fade-out begins so the caller
+      // can cross-fade its next screen in during PHG's 1.1s exit.
+      // onComplete still fires after the exit completes.
+      try { onDismiss(); } catch (e) { console.error(e); }
       setTimeout(() => {
         splash.remove();
         try { onComplete(); } catch (e) { console.error(e); }
-      }, 560);
+      }, 1100);
     }
 
     const onKey   = () => skipOnInput && dismiss();

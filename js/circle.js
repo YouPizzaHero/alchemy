@@ -683,9 +683,17 @@
   function isCombining() { return combining; }
 
   // --- Rank-driven slot count + unlock cutscene -----------------------------
-  function setSlotCountForRank(rankSlug) {
+  // `isInitial` is true on the first call after hydrate: the saved rank
+  // might already grant 3/4/5 slots, but the player isn't *progressing* —
+  // they're resuming. Rebuild the slots silently in that case, no cutscene.
+  function setSlotCountForRank(rankSlug, isInitial) {
     const target = SLOT_COUNT_FOR_RANK[rankSlug] || 2;
     if (target === slotCount) return false;
+    if (isInitial) {
+      // Silent catch-up on load. No cutscene, no auto-dismiss timer.
+      rebuildSlots(target);
+      return true;
+    }
     const growing = target > slotCount;
     if (growing) {
       // Defer the slot expansion so the rank-up banner gets a moment to play,

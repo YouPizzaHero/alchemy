@@ -38,12 +38,23 @@
     spawnEmbers();
   }
 
+  // Two-step entrance so we can cross-fade with the Pizza Hero Gaming
+  // splash: show() mounts the title screen with an opaque dark backdrop
+  // but the foreground content stays at opacity:0. revealContent() then
+  // adds .visible to fade the title text in. The caller drives the
+  // timing — typically wiring it to PHG's onDismiss callback so the
+  // title blooms in as the splash fades out.
   function show(onEnter) {
     if (!titleEl) return;
     onEnterCallback = onEnter || null;
     updateWelcome();
-    titleEl.classList.remove('hidden', 'leaving');
-    // Defer the 'visible' class one frame so the CSS transition fires.
+    titleEl.classList.remove('hidden', 'leaving', 'visible');
+  }
+
+  function revealContent() {
+    if (!titleEl) return;
+    // Defer one frame so the CSS transition actually fires from the
+    // current (opacity:0) state.
     requestAnimationFrame(() => titleEl.classList.add('visible'));
   }
 
@@ -77,7 +88,7 @@
   function dismiss() {
     if (!titleEl || titleEl.classList.contains('hidden')) return;
     titleEl.classList.add('leaving');
-    // Match the CSS leaving transition (600ms).
+    // Match the CSS leaving transition (1s for the cinematic dissolve).
     setTimeout(() => {
       titleEl.classList.add('hidden');
       titleEl.classList.remove('leaving', 'visible');
@@ -86,7 +97,7 @@
         onEnterCallback = null;
         cb();
       }
-    }, 600);
+    }, 1000);
   }
 
   function openModal(id) {
@@ -115,5 +126,5 @@
     }
   }
 
-  global.TitleScreen = { init, show, dismiss };
+  global.TitleScreen = { init, show, revealContent, dismiss };
 })(window);

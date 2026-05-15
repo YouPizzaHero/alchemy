@@ -96,9 +96,12 @@
     document.getElementById('loading').classList.add('hidden');
 
     // Stage transitions on first load:
-    //   1. Pizza Hero Gaming splash plays on top (highest z-index).
-    //   2. When the player dismisses it, the title screen is already
-    //      mounted behind and becomes the foreground.
+    //   1. Pizza Hero Gaming splash plays on top (highest z-index),
+    //      with the title screen already mounted behind it (opaque
+    //      backdrop, but its foreground content held at opacity:0).
+    //   2. When the player dismisses the PHG splash, the splash begins
+    //      its 560ms fade-out AND we trigger the title's content
+    //      fade-in via `revealContent()` — they cross-fade.
     //   3. Tapping "Enter the Circle" fades the title screen out and
     //      triggers the first-run tutorial (if not seen) once any
     //      legacy-saves modal is closed.
@@ -111,7 +114,15 @@
     }
 
     if (typeof PizzaHeroSplash !== 'undefined') {
-      PizzaHeroSplash.show({ tagline: 'GAMING' });
+      PizzaHeroSplash.show({
+        tagline: 'GAMING',
+        onDismiss: () => {
+          if (typeof TitleScreen !== 'undefined') TitleScreen.revealContent();
+        },
+      });
+    } else if (typeof TitleScreen !== 'undefined') {
+      // No splash module — just reveal the title content immediately.
+      TitleScreen.revealContent();
     }
 
     function onTitleEntered() {
