@@ -18,16 +18,16 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=EB+Garamond:ital@0;1&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/splash.css?v=78">
-  <link rel="stylesheet" href="css/main.css?v=78">
-  <link rel="stylesheet" href="css/icons.css?v=78">
-  <link rel="stylesheet" href="css/workspace.css?v=78">
-  <link rel="stylesheet" href="css/circle.css?v=78">
-  <link rel="stylesheet" href="css/themes.css?v=78">
-  <link rel="stylesheet" href="css/seasons.css?v=78">
-  <link rel="stylesheet" href="css/lineage.css?v=78">
-  <link rel="stylesheet" href="css/hints.css?v=78">
-  <link rel="stylesheet" href="css/title.css?v=78">
+  <link rel="stylesheet" href="css/splash.css?v=79">
+  <link rel="stylesheet" href="css/main.css?v=79">
+  <link rel="stylesheet" href="css/icons.css?v=79">
+  <link rel="stylesheet" href="css/workspace.css?v=79">
+  <link rel="stylesheet" href="css/circle.css?v=79">
+  <link rel="stylesheet" href="css/themes.css?v=79">
+  <link rel="stylesheet" href="css/seasons.css?v=79">
+  <link rel="stylesheet" href="css/lineage.css?v=79">
+  <link rel="stylesheet" href="css/hints.css?v=79">
+  <link rel="stylesheet" href="css/title.css?v=79">
 </head>
 <body>
   <div id="app">
@@ -103,12 +103,18 @@
           <input id="search" type="search" placeholder="Search…" aria-label="Search elements" aria-controls="library-list" autocomplete="off">
           <button id="btn-library-toggle" class="ghost mobile-only" aria-label="Toggle library">▾</button>
         </div>
+        <div id="sort-bar" role="group" aria-label="Sort order">
+          <span class="sort-label">Sort</span>
+          <button type="button" class="sort-opt" data-sort="name"     title="Sort alphabetically">A–Z</button>
+          <button type="button" class="sort-opt" data-sort="recent"   title="Sort by most recent discovery">Recent</button>
+          <button type="button" class="sort-opt" data-sort="category" title="Group by category, then alphabetical">By Type</button>
+        </div>
         <button id="filter-toggle" type="button" aria-expanded="true" aria-controls="category-tabs">
           <span class="ft-label">Filters</span>
           <span id="ft-active" class="ft-active"></span>
           <span class="ft-chevron">▾</span>
         </button>
-        <nav id="category-tabs" role="tablist"></nav>
+        <nav id="category-tabs" role="tablist" aria-multiselectable="true"></nav>
         <div id="library-list" role="list"></div>
       </aside>
     </main>
@@ -321,30 +327,30 @@
 
   </div>
 
-  <script src="js/splash.js?v=78"></script>
-  <script src="data/elements.js?v=78"></script>
-  <script src="data/recipes.js?v=78"></script>
-  <script src="data/multi_recipes.js?v=78"></script>
-  <script src="js/storage.js?v=78"></script>
-  <script src="js/state.js?v=78"></script>
-  <script src="js/recipes.js?v=78"></script>
-  <script src="js/multi_recipes.js?v=78"></script>
-  <script src="js/ranks.js?v=78"></script>
-  <script src="js/icons.js?v=78"></script>
-  <script src="js/progress.js?v=78"></script>
-  <script src="js/saves.js?v=78"></script>
-  <script src="js/tutorial.js?v=78"></script>
-  <script src="js/lineage.js?v=78"></script>
-  <script src="js/graph.js?v=78"></script>
-  <script src="js/ads.js?v=78"></script>
-  <script src="js/hints.js?v=78"></script>
-  <script src="js/seasons.js?v=78"></script>
-  <script src="js/sound.js?v=78"></script>
-  <script src="js/settings.js?v=78"></script>
-  <script src="js/sidebar.js?v=78"></script>
-  <script src="js/circle.js?v=78"></script>
-  <script src="js/workspace.js?v=78"></script>
-  <script src="js/title.js?v=78"></script>
-  <script src="js/main.js?v=78"></script>
+  <script src="js/splash.js?v=79"></script>
+  <script src="data/elements.js?v=79"></script>
+  <script src="data/recipes.js?v=79"></script>
+  <script src="data/multi_recipes.js?v=79"></script>
+  <script src="js/storage.js?v=79"></script>
+  <script src="js/state.js?v=79"></script>
+  <script src="js/recipes.js?v=79"></script>
+  <script src="js/multi_recipes.js?v=79"></script>
+  <script src="js/ranks.js?v=79"></script>
+  <script src="js/icons.js?v=79"></script>
+  <script src="js/progress.js?v=79"></script>
+  <script src="js/saves.js?v=79"></script>
+  <script src="js/tutorial.js?v=79"></script>
+  <script src="js/lineage.js?v=79"></script>
+  <script src="js/graph.js?v=79"></script>
+  <script src="js/ads.js?v=79"></script>
+  <script src="js/hints.js?v=79"></script>
+  <script src="js/seasons.js?v=79"></script>
+  <script src="js/sound.js?v=79"></script>
+  <script src="js/settings.js?v=79"></script>
+  <script src="js/sidebar.js?v=79"></script>
+  <script src="js/circle.js?v=79"></script>
+  <script src="js/workspace.js?v=79"></script>
+  <script src="js/title.js?v=79"></script>
+  <script src="js/main.js?v=79"></script>
 </body>
 </html>

@@ -53,12 +53,30 @@
     return { discovered: Array.from(state.discovered) };
   }
   function hydrate() {
+    // Order matters: a JS Set preserves insertion order, and Array.from
+    // walks it in that order. The sidebar uses this to drive "most
+    // recent" sorting (later position = more recently discovered).
+    // So we add the bases FIRST (they should always anchor the start
+    // of the order), then layer saved discoveries on top. The Set
+    // dedupes — a base id present in the save is ignored, not moved.
+    for (const el of state.elements) if (el.base) state.discovered.add(el.id);
     const saved = Storage.load();
     if (saved && Array.isArray(saved.discovered)) {
       for (const id of saved.discovered) if (state.byId.has(id)) state.discovered.add(id);
     }
-    // Always ensure base elements are present.
-    for (const el of state.elements) if (el.base) state.discovered.add(el.id);
+  }
+
+  // Index of a discovered element in the player's history. 0 = the
+  // first discovery (typically water), higher = more recent. Returns
+  // -1 for elements not yet discovered. Used by the sidebar's
+  // "Recent" sort mode.
+  function discoveryIndex(id) {
+    let i = 0;
+    for (const x of state.discovered) {
+      if (x === id) return i;
+      i++;
+    }
+    return -1;
   }
 
   function onChange(cb) { state.listeners.add(cb); return () => state.listeners.delete(cb); }
@@ -67,7 +85,7 @@
   global.State = {
     state,
     ingestElements,
-    discover, isDiscovered,
+    discover, isDiscovered, discoveryIndex,
     resetProgress, loadDiscovered, hydrate, onChange,
   };
 })(window);

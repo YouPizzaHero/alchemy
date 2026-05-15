@@ -223,6 +223,53 @@ body.layout-flipped #workspace { border-right: none; border-left: 1px solid var(
 #search:focus { border-color: var(--gold); box-shadow: 0 0 0 1px var(--gold); }
 #search::placeholder { color: var(--ink-mute); font-style: italic; }
 
+/* Sort bar — segmented selector above the category filters. Three
+   modes: alphabetical (A–Z), most recent discovery (Recent), and
+   group-by-category (By Type). Active mode is highlighted gold. */
+#sort-bar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 12px 6px;
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+  flex-shrink: 0;
+}
+#sort-bar .sort-label {
+  font-family: 'Cinzel', serif;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--parchment-dim, var(--ink-dim));
+  margin-right: 6px;
+  flex-shrink: 0;
+}
+#sort-bar .sort-opt {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 4px 9px;
+  min-height: 24px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  color: var(--parchment-dim, var(--ink-dim));
+  cursor: pointer;
+  transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+}
+#sort-bar .sort-opt:hover {
+  color: var(--parchment);
+  border-color: var(--border-light);
+  background: rgba(58, 40, 90, 0.4);
+  box-shadow: none;
+}
+#sort-bar .sort-opt.active {
+  background: var(--bg-soft);
+  color: var(--gold-bright);
+  border-color: var(--gold);
+}
+
 #filter-toggle {
   display: flex;
   align-items: center;
@@ -424,6 +471,11 @@ body.layout-flipped #workspace { border-right: none; border-left: 1px solid var(
 
   /* Filter toggle compact */
   #filter-toggle { padding: 6px 10px; font-size: 9px; min-height: 28px; }
+
+  /* Sort bar compact on landscape phones */
+  #sort-bar { padding: 6px 10px 4px; gap: 3px; }
+  #sort-bar .sort-label { font-size: 8px; margin-right: 4px; }
+  #sort-bar .sort-opt   { font-size: 9px; padding: 3px 7px; min-height: 22px; }
 
   /* Modal cards usable on tiny landscape screens */
   .modal-card {
