@@ -73,10 +73,10 @@ ignite.
 
 ## Miracle recipes
 
-In addition to the **159 pair recipes**, there are **28 hand-authored
+In addition to the **158 pair recipes**, there are **29 hand-authored
 "miracle" recipes** that take 3, 4, or 5 specific ingredients at once:
 
-- **Triplets** unlock at Adept (3 slots) — 20 of them.
+- **Triplets** unlock at Adept (3 slots) — 21 of them.
 - **Quartets** unlock at Mystic (4 slots) — 7 of them.
 - **Quintet** unlocks at Archmage (5 slots) — 1 great working.
 
@@ -187,7 +187,7 @@ tool, structure, mineral, mythic, time, abstract`.
 ## Stats at a glance
 
 - **190 elements** (4 base + 186 discoverable)
-- **159 pair recipes** + **28 miracle recipes** = **187 paths**
+- **158 pair recipes** + **29 miracle recipes** = **187 paths**
 - **4 alchemical sigils** tied to rank progression
 - **8 rank tiers** with themed boards
 - 100% reachable from a fresh save

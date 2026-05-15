@@ -1,161 +1,792 @@
 [
-  { "a": "water"      , "b": "water"      , "result": "wave" },
-  { "a": "wave"       , "b": "wave"       , "result": "tsunami" },
-  { "a": "water"      , "b": "wave"       , "result": "sea" },
-  { "a": "sea"        , "b": "sea"        , "result": "ocean" },
-  { "a": "water"      , "b": "air"        , "result": "mist" },
-  { "a": "mist"       , "b": "mist"       , "result": "fog" },
-  { "a": "mist"       , "b": "air"        , "result": "cloud" },
-  { "a": "cloud"      , "b": "water"      , "result": "rain" },
-  { "a": "cloud"      , "b": "cloud"      , "result": "sky" },
-  { "a": "rain"       , "b": "earth"      , "result": "plant" },
-  { "a": "rain"       , "b": "rain"       , "result": "puddle" },
-  { "a": "water"      , "b": "earth"      , "result": "mud" },
-  { "a": "mud"        , "b": "water"      , "result": "swamp" },
-  { "a": "rain"       , "b": "water"      , "result": "river" },
-  { "a": "river"      , "b": "river"      , "result": "lake" },
-  { "a": "water"      , "b": "fire"       , "result": "steam" },
-  { "a": "rain"       , "b": "sun"        , "result": "rainbow" },
-  { "a": "fire"       , "b": "fire"       , "result": "inferno" },
-  { "a": "fire"       , "b": "earth"      , "result": "lava" },
-  { "a": "fire"       , "b": "air"        , "result": "energy" },
-  { "a": "fire"       , "b": "ash"        , "result": "ember" },
-  { "a": "fire"       , "b": "wood"       , "result": "charcoal" },
-  { "a": "fire"       , "b": "tree"       , "result": "ash" },
-  { "a": "ash"        , "b": "ash"        , "result": "dust" },
-  { "a": "ember"      , "b": "wood"       , "result": "fire" },
-  { "a": "lava"       , "b": "water"      , "result": "stone" },
-  { "a": "lava"       , "b": "earth"      , "result": "volcano" },
-  { "a": "fire"       , "b": "energy"     , "result": "explosion" },
-  { "a": "energy"     , "b": "air"        , "result": "lightning" },
-  { "a": "lightning"  , "b": "cloud"      , "result": "thunder" },
-  { "a": "fire"       , "b": "sand"       , "result": "glass" },
-  { "a": "fire"       , "b": "stone"      , "result": "metal" },
-  { "a": "fire"       , "b": "sky"        , "result": "sun" },
-  { "a": "sky"        , "b": "sky"        , "result": "space" },
-  { "a": "sun"        , "b": "sun"        , "result": "star" },
-  { "a": "space"      , "b": "earth"      , "result": "moon" },
-  { "a": "earth"      , "b": "earth"      , "result": "mountain" },
-  { "a": "mountain"   , "b": "earth"      , "result": "hill" },
-  { "a": "stone"      , "b": "stone"      , "result": "rock" },
-  { "a": "stone"      , "b": "water"      , "result": "sand" },
-  { "a": "earth"      , "b": "mud"        , "result": "clay" },
-  { "a": "clay"       , "b": "clay"       , "result": "brick" },
-  { "a": "brick"      , "b": "brick"      , "result": "wall" },
-  { "a": "wall"       , "b": "wall"       , "result": "house" },
-  { "a": "glass"      , "b": "glass"      , "result": "mirror" },
-  { "a": "glass"      , "b": "sand"       , "result": "lens" },
-  { "a": "crystal"    , "b": "earth"      , "result": "gem" },
-  { "a": "stone"      , "b": "pressure"   , "result": "crystal" },
-  { "a": "metal"      , "b": "fire"       , "result": "iron" },
-  { "a": "iron"       , "b": "iron"       , "result": "steel" },
-  { "a": "sea"        , "b": "sun"        , "result": "salt" },
-  { "a": "water"      , "b": "energy"     , "result": "life" },
-  { "a": "life"       , "b": "life"       , "result": "egg" },
-  { "a": "life"       , "b": "earth"      , "result": "human" },
-  { "a": "life"       , "b": "water"      , "result": "plankton" },
-  { "a": "egg"        , "b": "egg"        , "result": "bird" },
-  { "a": "egg"        , "b": "fire"       , "result": "egg_cooked" },
-  { "a": "egg"        , "b": "earth"      , "result": "lizard" },
-  { "a": "plankton"   , "b": "plankton"   , "result": "fish" },
-  { "a": "fish"       , "b": "fish"       , "result": "shark" },
-  { "a": "shark"      , "b": "shark"      , "result": "whale" },
-  { "a": "bird"       , "b": "bird"       , "result": "eagle" },
-  { "a": "bird"       , "b": "earth"      , "result": "chicken" },
-  { "a": "lizard"     , "b": "lizard"     , "result": "snake" },
-  { "a": "lizard"     , "b": "fire"       , "result": "dragon" },
-  { "a": "mud"        , "b": "life"       , "result": "worm" },
-  { "a": "lizard"     , "b": "time"       , "result": "dinosaur" },
-  { "a": "dinosaur"   , "b": "earth"      , "result": "fossil" },
-  { "a": "fossil"     , "b": "fossil"     , "result": "history" },
-  { "a": "human"      , "b": "earth"      , "result": "farm" },
-  { "a": "human"      , "b": "death"      , "result": "corpse" },
-  { "a": "human"      , "b": "knife"      , "result": "blood" },
-  { "a": "book"       , "b": "human"      , "result": "wizard" },
-  { "a": "human"      , "b": "sky"        , "result": "angel" },
-  { "a": "cow"        , "b": "water"      , "result": "milk" },
-  { "a": "milk"       , "b": "milk"       , "result": "cheese" },
-  { "a": "wolf"       , "b": "love"       , "result": "dog" },
-  { "a": "forest"     , "b": "life"       , "result": "wolf" },
-  { "a": "plant"      , "b": "plant"      , "result": "tree" },
-  { "a": "tree"       , "b": "tree"       , "result": "forest" },
-  { "a": "tree"       , "b": "stone"      , "result": "wood" },
-  { "a": "plant"      , "b": "water"      , "result": "seed" },
-  { "a": "plant"      , "b": "earth"      , "result": "grass" },
-  { "a": "grass"      , "b": "grass"      , "result": "field" },
-  { "a": "grass"      , "b": "earth"      , "result": "moss" },
-  { "a": "plant"      , "b": "sun"        , "result": "flower" },
-  { "a": "flower"     , "b": "flower"     , "result": "garden" },
-  { "a": "plant"      , "b": "swamp"      , "result": "weed" },
-  { "a": "plant"      , "b": "tree"       , "result": "vine" },
-  { "a": "grass"      , "b": "fire"       , "result": "wheat" },
-  { "a": "wheat"      , "b": "fire"       , "result": "bread" },
-  { "a": "earth"      , "b": "moss"       , "result": "mushroom" },
-  { "a": "stone"      , "b": "stick"      , "result": "axe" },
-  { "a": "metal"      , "b": "wood"       , "result": "hammer" },
-  { "a": "steel"      , "b": "wood"       , "result": "sword" },
-  { "a": "wood"       , "b": "iron"       , "result": "shield" },
-  { "a": "metal"      , "b": "stone"      , "result": "knife" },
-  { "a": "wood"       , "b": "stone"      , "result": "wheel" },
-  { "a": "metal"      , "b": "gold"       , "result": "key" },
-  { "a": "metal"      , "b": "metal"      , "result": "lock" },
-  { "a": "wood"       , "b": "vine"       , "result": "bow" },
-  { "a": "bow"        , "b": "stick"      , "result": "arrow" },
-  { "a": "metal"      , "b": "gunpowder"  , "result": "gun" },
-  { "a": "charcoal"   , "b": "salt"       , "result": "gunpowder" },
-  { "a": "axe"        , "b": "hammer"     , "result": "tools" },
-  { "a": "wood"       , "b": "wheel"      , "result": "boat" },
-  { "a": "wood"       , "b": "river"      , "result": "bridge" },
-  { "a": "stone"      , "b": "earth"      , "result": "road" },
-  { "a": "water"      , "b": "brick"      , "result": "well" },
-  { "a": "wind"       , "b": "wheel"      , "result": "windmill" },
-  { "a": "air"        , "b": "air"        , "result": "wind" },
-  { "a": "wind"       , "b": "wind"       , "result": "storm" },
-  { "a": "storm"      , "b": "storm"      , "result": "tornado" },
-  { "a": "tornado"    , "b": "tornado"    , "result": "hurricane" },
-  { "a": "air"        , "b": "void"       , "result": "vacuum" },
-  { "a": "earth"      , "b": "energy"     , "result": "earthquake" },
-  { "a": "life"       , "b": "death"      , "result": "soul" },
-  { "a": "soul"       , "b": "soul"       , "result": "ghost" },
-  { "a": "life"       , "b": "fire"       , "result": "death" },
-  { "a": "sand"       , "b": "time"       , "result": "clock" },
-  { "a": "moon"       , "b": "star"       , "result": "time" },
-  { "a": "music"      , "b": "music"      , "result": "love" },
-  { "a": "human"      , "b": "sleep"      , "result": "dream" },
-  { "a": "human"      , "b": "knowledge"  , "result": "idea" },
-  { "a": "book"       , "b": "book"       , "result": "knowledge" },
-  { "a": "mountain"   , "b": "cloud"      , "result": "snow" },
-  { "a": "snow"       , "b": "snow"       , "result": "ice" },
-  { "a": "sand"       , "b": "sun"        , "result": "desert" },
-  { "a": "desert"     , "b": "water"      , "result": "oasis" },
-  { "a": "sand"       , "b": "sea"        , "result": "beach" },
-  { "a": "mountain"   , "b": "water"      , "result": "cave" },
-  { "a": "sea"        , "b": "life"       , "result": "shell" },
-  { "a": "shell"      , "b": "sand"       , "result": "pearl" },
-  { "a": "sea"        , "b": "plant"      , "result": "coral" },
-  { "a": "wood"       , "b": "water"      , "result": "paper" },
-  { "a": "paper"      , "b": "paper"      , "result": "book" },
-  { "a": "fruit"      , "b": "time"       , "result": "wine" },
-  { "a": "wheat"      , "b": "water"      , "result": "beer" },
-  { "a": "pizza"      , "b": "human"      , "result": "hero" },
-  { "a": "cow"        , "b": "knife"      , "result": "meat" },
-  { "a": "meat"       , "b": "water"      , "result": "soup" },
-  { "a": "wood"       , "b": "lock"       , "result": "chest" },
-  { "a": "stick"      , "b": "fire"       , "result": "torch" },
-  { "a": "wizard"     , "b": "book"       , "result": "magic" },
-  { "a": "air"        , "b": "space"      , "result": "void" },
-  { "a": "wood"       , "b": "knife"      , "result": "stick" },
-  { "a": "tree"       , "b": "pressure"   , "result": "coal" },
-  { "a": "cow"        , "b": "stone"      , "result": "horn" },
-  { "a": "moon"       , "b": "earth"      , "result": "night" },
-  { "a": "night"      , "b": "human"      , "result": "sleep" },
-  { "a": "rock"       , "b": "rock"       , "result": "pressure" },
-  { "a": "ember"      , "b": "water"      , "result": "smoke" },
-  { "a": "metal"      , "b": "sun"        , "result": "gold" },
-  { "a": "plant"      , "b": "pressure"   , "result": "oil" },
-  { "a": "grass"      , "b": "life"       , "result": "cow" },
-  { "a": "farm"       , "b": "life"       , "result": "horse" },
-  { "a": "fish"       , "b": "life"       , "result": "cat" },
-  { "a": "tree"       , "b": "sun"        , "result": "fruit" },
-  { "a": "bird"       , "b": "human"      , "result": "music" }
+  {
+    "a": "water",
+    "b": "water",
+    "result": "wave"
+  },
+  {
+    "a": "wave",
+    "b": "wave",
+    "result": "tsunami"
+  },
+  {
+    "a": "water",
+    "b": "wave",
+    "result": "sea"
+  },
+  {
+    "a": "sea",
+    "b": "sea",
+    "result": "ocean"
+  },
+  {
+    "a": "water",
+    "b": "air",
+    "result": "mist"
+  },
+  {
+    "a": "mist",
+    "b": "mist",
+    "result": "fog"
+  },
+  {
+    "a": "mist",
+    "b": "air",
+    "result": "cloud"
+  },
+  {
+    "a": "cloud",
+    "b": "water",
+    "result": "rain"
+  },
+  {
+    "a": "cloud",
+    "b": "cloud",
+    "result": "sky"
+  },
+  {
+    "a": "rain",
+    "b": "earth",
+    "result": "plant"
+  },
+  {
+    "a": "rain",
+    "b": "rain",
+    "result": "puddle"
+  },
+  {
+    "a": "water",
+    "b": "earth",
+    "result": "mud"
+  },
+  {
+    "a": "mud",
+    "b": "water",
+    "result": "swamp"
+  },
+  {
+    "a": "rain",
+    "b": "water",
+    "result": "river"
+  },
+  {
+    "a": "river",
+    "b": "river",
+    "result": "lake"
+  },
+  {
+    "a": "water",
+    "b": "fire",
+    "result": "steam"
+  },
+  {
+    "a": "rain",
+    "b": "sun",
+    "result": "rainbow"
+  },
+  {
+    "a": "fire",
+    "b": "fire",
+    "result": "inferno"
+  },
+  {
+    "a": "fire",
+    "b": "earth",
+    "result": "lava"
+  },
+  {
+    "a": "fire",
+    "b": "air",
+    "result": "energy"
+  },
+  {
+    "a": "fire",
+    "b": "ash",
+    "result": "ember"
+  },
+  {
+    "a": "fire",
+    "b": "wood",
+    "result": "charcoal"
+  },
+  {
+    "a": "fire",
+    "b": "tree",
+    "result": "ash"
+  },
+  {
+    "a": "ash",
+    "b": "ash",
+    "result": "dust"
+  },
+  {
+    "a": "ember",
+    "b": "wood",
+    "result": "fire"
+  },
+  {
+    "a": "lava",
+    "b": "water",
+    "result": "stone"
+  },
+  {
+    "a": "lava",
+    "b": "earth",
+    "result": "volcano"
+  },
+  {
+    "a": "fire",
+    "b": "energy",
+    "result": "explosion"
+  },
+  {
+    "a": "energy",
+    "b": "air",
+    "result": "lightning"
+  },
+  {
+    "a": "lightning",
+    "b": "cloud",
+    "result": "thunder"
+  },
+  {
+    "a": "fire",
+    "b": "sand",
+    "result": "glass"
+  },
+  {
+    "a": "fire",
+    "b": "stone",
+    "result": "metal"
+  },
+  {
+    "a": "fire",
+    "b": "sky",
+    "result": "sun"
+  },
+  {
+    "a": "sky",
+    "b": "sky",
+    "result": "space"
+  },
+  {
+    "a": "sun",
+    "b": "sun",
+    "result": "star"
+  },
+  {
+    "a": "space",
+    "b": "earth",
+    "result": "moon"
+  },
+  {
+    "a": "earth",
+    "b": "earth",
+    "result": "mountain"
+  },
+  {
+    "a": "mountain",
+    "b": "earth",
+    "result": "hill"
+  },
+  {
+    "a": "stone",
+    "b": "stone",
+    "result": "rock"
+  },
+  {
+    "a": "stone",
+    "b": "water",
+    "result": "sand"
+  },
+  {
+    "a": "earth",
+    "b": "mud",
+    "result": "clay"
+  },
+  {
+    "a": "clay",
+    "b": "clay",
+    "result": "brick"
+  },
+  {
+    "a": "brick",
+    "b": "brick",
+    "result": "wall"
+  },
+  {
+    "a": "wall",
+    "b": "wall",
+    "result": "house"
+  },
+  {
+    "a": "glass",
+    "b": "glass",
+    "result": "mirror"
+  },
+  {
+    "a": "glass",
+    "b": "sand",
+    "result": "lens"
+  },
+  {
+    "a": "crystal",
+    "b": "earth",
+    "result": "gem"
+  },
+  {
+    "a": "stone",
+    "b": "pressure",
+    "result": "crystal"
+  },
+  {
+    "a": "metal",
+    "b": "fire",
+    "result": "iron"
+  },
+  {
+    "a": "iron",
+    "b": "iron",
+    "result": "steel"
+  },
+  {
+    "a": "sea",
+    "b": "sun",
+    "result": "salt"
+  },
+  {
+    "a": "life",
+    "b": "life",
+    "result": "egg"
+  },
+  {
+    "a": "life",
+    "b": "earth",
+    "result": "human"
+  },
+  {
+    "a": "life",
+    "b": "water",
+    "result": "plankton"
+  },
+  {
+    "a": "egg",
+    "b": "egg",
+    "result": "bird"
+  },
+  {
+    "a": "egg",
+    "b": "fire",
+    "result": "egg_cooked"
+  },
+  {
+    "a": "egg",
+    "b": "earth",
+    "result": "lizard"
+  },
+  {
+    "a": "plankton",
+    "b": "plankton",
+    "result": "fish"
+  },
+  {
+    "a": "fish",
+    "b": "fish",
+    "result": "shark"
+  },
+  {
+    "a": "shark",
+    "b": "shark",
+    "result": "whale"
+  },
+  {
+    "a": "bird",
+    "b": "bird",
+    "result": "eagle"
+  },
+  {
+    "a": "bird",
+    "b": "earth",
+    "result": "chicken"
+  },
+  {
+    "a": "lizard",
+    "b": "lizard",
+    "result": "snake"
+  },
+  {
+    "a": "lizard",
+    "b": "fire",
+    "result": "dragon"
+  },
+  {
+    "a": "mud",
+    "b": "life",
+    "result": "worm"
+  },
+  {
+    "a": "lizard",
+    "b": "time",
+    "result": "dinosaur"
+  },
+  {
+    "a": "dinosaur",
+    "b": "earth",
+    "result": "fossil"
+  },
+  {
+    "a": "fossil",
+    "b": "fossil",
+    "result": "history"
+  },
+  {
+    "a": "human",
+    "b": "earth",
+    "result": "farm"
+  },
+  {
+    "a": "human",
+    "b": "death",
+    "result": "corpse"
+  },
+  {
+    "a": "human",
+    "b": "knife",
+    "result": "blood"
+  },
+  {
+    "a": "book",
+    "b": "human",
+    "result": "wizard"
+  },
+  {
+    "a": "human",
+    "b": "sky",
+    "result": "angel"
+  },
+  {
+    "a": "cow",
+    "b": "water",
+    "result": "milk"
+  },
+  {
+    "a": "milk",
+    "b": "milk",
+    "result": "cheese"
+  },
+  {
+    "a": "wolf",
+    "b": "love",
+    "result": "dog"
+  },
+  {
+    "a": "forest",
+    "b": "life",
+    "result": "wolf"
+  },
+  {
+    "a": "plant",
+    "b": "plant",
+    "result": "tree"
+  },
+  {
+    "a": "tree",
+    "b": "tree",
+    "result": "forest"
+  },
+  {
+    "a": "tree",
+    "b": "stone",
+    "result": "wood"
+  },
+  {
+    "a": "plant",
+    "b": "water",
+    "result": "seed"
+  },
+  {
+    "a": "plant",
+    "b": "earth",
+    "result": "grass"
+  },
+  {
+    "a": "grass",
+    "b": "grass",
+    "result": "field"
+  },
+  {
+    "a": "grass",
+    "b": "earth",
+    "result": "moss"
+  },
+  {
+    "a": "plant",
+    "b": "sun",
+    "result": "flower"
+  },
+  {
+    "a": "flower",
+    "b": "flower",
+    "result": "garden"
+  },
+  {
+    "a": "plant",
+    "b": "swamp",
+    "result": "weed"
+  },
+  {
+    "a": "plant",
+    "b": "tree",
+    "result": "vine"
+  },
+  {
+    "a": "grass",
+    "b": "fire",
+    "result": "wheat"
+  },
+  {
+    "a": "wheat",
+    "b": "fire",
+    "result": "bread"
+  },
+  {
+    "a": "earth",
+    "b": "moss",
+    "result": "mushroom"
+  },
+  {
+    "a": "stone",
+    "b": "stick",
+    "result": "axe"
+  },
+  {
+    "a": "metal",
+    "b": "wood",
+    "result": "hammer"
+  },
+  {
+    "a": "steel",
+    "b": "wood",
+    "result": "sword"
+  },
+  {
+    "a": "wood",
+    "b": "iron",
+    "result": "shield"
+  },
+  {
+    "a": "metal",
+    "b": "stone",
+    "result": "knife"
+  },
+  {
+    "a": "wood",
+    "b": "stone",
+    "result": "wheel"
+  },
+  {
+    "a": "metal",
+    "b": "gold",
+    "result": "key"
+  },
+  {
+    "a": "metal",
+    "b": "metal",
+    "result": "lock"
+  },
+  {
+    "a": "wood",
+    "b": "vine",
+    "result": "bow"
+  },
+  {
+    "a": "bow",
+    "b": "stick",
+    "result": "arrow"
+  },
+  {
+    "a": "metal",
+    "b": "gunpowder",
+    "result": "gun"
+  },
+  {
+    "a": "charcoal",
+    "b": "salt",
+    "result": "gunpowder"
+  },
+  {
+    "a": "axe",
+    "b": "hammer",
+    "result": "tools"
+  },
+  {
+    "a": "wood",
+    "b": "wheel",
+    "result": "boat"
+  },
+  {
+    "a": "wood",
+    "b": "river",
+    "result": "bridge"
+  },
+  {
+    "a": "stone",
+    "b": "earth",
+    "result": "road"
+  },
+  {
+    "a": "water",
+    "b": "brick",
+    "result": "well"
+  },
+  {
+    "a": "wind",
+    "b": "wheel",
+    "result": "windmill"
+  },
+  {
+    "a": "air",
+    "b": "air",
+    "result": "wind"
+  },
+  {
+    "a": "wind",
+    "b": "wind",
+    "result": "storm"
+  },
+  {
+    "a": "storm",
+    "b": "storm",
+    "result": "tornado"
+  },
+  {
+    "a": "tornado",
+    "b": "tornado",
+    "result": "hurricane"
+  },
+  {
+    "a": "air",
+    "b": "void",
+    "result": "vacuum"
+  },
+  {
+    "a": "earth",
+    "b": "energy",
+    "result": "earthquake"
+  },
+  {
+    "a": "life",
+    "b": "death",
+    "result": "soul"
+  },
+  {
+    "a": "soul",
+    "b": "soul",
+    "result": "ghost"
+  },
+  {
+    "a": "life",
+    "b": "fire",
+    "result": "death"
+  },
+  {
+    "a": "sand",
+    "b": "time",
+    "result": "clock"
+  },
+  {
+    "a": "moon",
+    "b": "star",
+    "result": "time"
+  },
+  {
+    "a": "music",
+    "b": "music",
+    "result": "love"
+  },
+  {
+    "a": "human",
+    "b": "sleep",
+    "result": "dream"
+  },
+  {
+    "a": "human",
+    "b": "knowledge",
+    "result": "idea"
+  },
+  {
+    "a": "book",
+    "b": "book",
+    "result": "knowledge"
+  },
+  {
+    "a": "mountain",
+    "b": "cloud",
+    "result": "snow"
+  },
+  {
+    "a": "snow",
+    "b": "snow",
+    "result": "ice"
+  },
+  {
+    "a": "sand",
+    "b": "sun",
+    "result": "desert"
+  },
+  {
+    "a": "desert",
+    "b": "water",
+    "result": "oasis"
+  },
+  {
+    "a": "sand",
+    "b": "sea",
+    "result": "beach"
+  },
+  {
+    "a": "mountain",
+    "b": "water",
+    "result": "cave"
+  },
+  {
+    "a": "sea",
+    "b": "life",
+    "result": "shell"
+  },
+  {
+    "a": "shell",
+    "b": "sand",
+    "result": "pearl"
+  },
+  {
+    "a": "sea",
+    "b": "plant",
+    "result": "coral"
+  },
+  {
+    "a": "wood",
+    "b": "water",
+    "result": "paper"
+  },
+  {
+    "a": "paper",
+    "b": "paper",
+    "result": "book"
+  },
+  {
+    "a": "fruit",
+    "b": "time",
+    "result": "wine"
+  },
+  {
+    "a": "wheat",
+    "b": "water",
+    "result": "beer"
+  },
+  {
+    "a": "pizza",
+    "b": "human",
+    "result": "hero"
+  },
+  {
+    "a": "cow",
+    "b": "knife",
+    "result": "meat"
+  },
+  {
+    "a": "meat",
+    "b": "water",
+    "result": "soup"
+  },
+  {
+    "a": "wood",
+    "b": "lock",
+    "result": "chest"
+  },
+  {
+    "a": "stick",
+    "b": "fire",
+    "result": "torch"
+  },
+  {
+    "a": "wizard",
+    "b": "book",
+    "result": "magic"
+  },
+  {
+    "a": "air",
+    "b": "space",
+    "result": "void"
+  },
+  {
+    "a": "wood",
+    "b": "knife",
+    "result": "stick"
+  },
+  {
+    "a": "tree",
+    "b": "pressure",
+    "result": "coal"
+  },
+  {
+    "a": "cow",
+    "b": "stone",
+    "result": "horn"
+  },
+  {
+    "a": "moon",
+    "b": "earth",
+    "result": "night"
+  },
+  {
+    "a": "night",
+    "b": "human",
+    "result": "sleep"
+  },
+  {
+    "a": "rock",
+    "b": "rock",
+    "result": "pressure"
+  },
+  {
+    "a": "ember",
+    "b": "water",
+    "result": "smoke"
+  },
+  {
+    "a": "metal",
+    "b": "sun",
+    "result": "gold"
+  },
+  {
+    "a": "plant",
+    "b": "pressure",
+    "result": "oil"
+  },
+  {
+    "a": "grass",
+    "b": "life",
+    "result": "cow"
+  },
+  {
+    "a": "farm",
+    "b": "life",
+    "result": "horse"
+  },
+  {
+    "a": "fish",
+    "b": "life",
+    "result": "cat"
+  },
+  {
+    "a": "tree",
+    "b": "sun",
+    "result": "fruit"
+  },
+  {
+    "a": "bird",
+    "b": "human",
+    "result": "music"
+  }
 ]

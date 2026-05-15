@@ -231,5 +231,13 @@
       "time"
     ],
     "result": "diamond"
+  },
+  {
+    "inputs": [
+      "air",
+      "fire",
+      "water"
+    ],
+    "result": "life"
   }
 ]

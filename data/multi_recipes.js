@@ -231,6 +231,14 @@ window.MULTI_RECIPES_DATA = [
       "time"
     ],
     "result": "diamond"
+  },
+  {
+    "inputs": [
+      "air",
+      "fire",
+      "water"
+    ],
+    "result": "life"
   }
 ]
 ;
