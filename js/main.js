@@ -121,8 +121,15 @@
     if (typeof PizzaHeroSplash !== 'undefined') {
       PizzaHeroSplash.show({
         tagline: 'GAMING',
-        onDismiss: () => {
-          if (typeof TitleScreen !== 'undefined') TitleScreen.revealContent();
+        // onComplete fires AFTER the PHG splash has fully faded out
+        // (vs. onDismiss which fires when the fade-out begins). Using
+        // onComplete gives a deliberate "fade to black, then fade in
+        // the title" sequence instead of a cross-fade.
+        onComplete: () => {
+          if (typeof TitleScreen === 'undefined') return;
+          // Short breath in the dark before the title blooms in. Adds
+          // a beat that feels cinematic; tune this between 300-800ms.
+          setTimeout(() => TitleScreen.revealContent(), 450);
         },
       });
     } else if (typeof TitleScreen !== 'undefined') {

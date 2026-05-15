@@ -110,11 +110,15 @@
   transform: translateY(0) scale(1);
   pointer-events: auto;
 }
-/* Embers + warm glow keep their entrance gentle too — start dim and
-   ramp up. They never let the workspace through (the ::before glow is
-   additive on top of an already-opaque backdrop). */
+/* Embers + warm candlelit glow start fully hidden so the "fade to
+   black" beat between PHG and the title reveal is genuinely dark.
+   On .visible they ramp in over 2s — slightly slower than the
+   foreground text, so the candlelight feels like it's *gathering*
+   around the title rather than appearing all at once. The dark
+   radial-gradient backdrop on #title-screen itself is what holds
+   the screen black during this transition. */
 .title-bg {
-  opacity: 0.4;
+  opacity: 0;
   transition: opacity 2s ease;
 }
 #title-screen.visible .title-bg { opacity: 1; }

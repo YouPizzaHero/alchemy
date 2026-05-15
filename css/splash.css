@@ -30,7 +30,13 @@
   animation: phs-fade-in 0.4s ease-out forwards, phs-shake 0.45s ease-out;
 }
 @keyframes phs-fade-in  { to { opacity: 1; } }
-@keyframes phs-fade-out { to { opacity: 0; transform: scale(1.06); } }
+/* Explicit 0% keyframe so the fade-out starts from visible (opacity 1).
+   Without it, the browser interpolates from the base rule's
+   opacity:0 to the target opacity:0 — a hard cut to black. */
+@keyframes phs-fade-out {
+  0%   { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.06); }
+}
 @keyframes phs-shake {
   0%, 100% { transform: translate(0, 0); }
   20% { transform: translate(-6px, 4px); }
