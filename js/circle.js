@@ -129,6 +129,12 @@
 
   function rebuildSlots(count) {
     slotCount = Math.max(2, Math.min(MAX_SLOTS, count));
+    // Defensive: if rebuildSlots is somehow called before Circle.init
+    // has wired up DOM refs (e.g. another module's init firing
+    // Circle.setSlotCountForRank too early), just track the count and
+    // bail. Circle.init's own rebuildSlots(slotCount) call will paint
+    // the right number of slots once refs are ready.
+    if (!boardEl || !slotsEl) return;
     boardEl.setAttribute('data-slot-count', String(slotCount));
     slotsEl.innerHTML = '';
     slots = [];

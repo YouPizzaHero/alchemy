@@ -78,8 +78,13 @@
     State.hydrate();
 
     Settings.init();
-    Progress.init();
+    // Circle MUST initialise before Progress: Progress.render runs once
+    // during init and calls Circle.setSlotCountForRank, which may need
+    // to rebuild the slots immediately when the saved rank already
+    // granted a wider circle. If Circle isn't ready yet, boardEl is
+    // undefined and rebuildSlots crashes on setAttribute.
     Circle.init();
+    Progress.init();
     Workspace.init();
     Sidebar.init();
     Saves.init();
